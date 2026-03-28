@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khushboo Kumari — ML Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050507;--card:rgba(14,14,18,.92);--border:rgba(255,255,255,.08);
+  --text:#e8e6e3;--muted:#77777f;--accent:#e8364e;--accent2:#ff6b35;
+  --blue:#4e9bff;--green:#3dd68c;--purple:#a78bfa;--teal:#2dd4bf;
+  --font:'Syne',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+.scroll-container{height:900vh;position:relative}
+#c{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:100;transition:width .1s;width:0}
+.nav-dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:10px}
+.nav-dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;cursor:pointer;transition:all .3s;padding:0}
+.nav-dot.active{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
+.nav-dot:hover{border-color:var(--accent)}
+.section{position:fixed;top:0;left:0;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;z-index:1;pointer-events:none;opacity:0;transform:translateY(30px) scale(.98);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.section.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.section-inner{max-width:900px;width:100%;padding:0 28px}
+.hero-content{text-align:center}
+.hero-name{font-size:clamp(3.5rem,9vw,7rem);font-weight:800;letter-spacing:-4px;line-height:.95;background:linear-gradient(135deg,#fff 0%,var(--accent) 40%,var(--accent2) 70%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-role{font-family:var(--mono);font-size:clamp(.75rem,1.2vw,.95rem);color:var(--muted);letter-spacing:5px;text-transform:uppercase;margin-top:20px}
+.hero-line{width:50px;height:3px;background:var(--accent);margin:20px auto;border-radius:2px}
+.hero-links{display:flex;gap:16px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.hero-links a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:2px;text-transform:uppercase;transition:color .3s;padding:6px 14px;border:1px solid var(--border);border-radius:6px}
+.hero-links a:hover{color:var(--accent);border-color:var(--accent)}
+.hero-scroll{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:36px}
+.hero-scroll span{display:block;width:1px;height:24px;background:var(--accent);margin:8px auto 0;animation:sp 2s infinite}
+@keyframes sp{0%,100%{opacity:.2;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.5)}}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.m-box{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:14px;padding:24px 12px;text-align:center;transition:transform .3s,border-color .3s}
+.m-box:hover{transform:translateY(-3px);border-color:var(--accent)}
+.m-val{font-size:32px;font-weight:800;letter-spacing:-1px}
+.m-label{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+.slabel{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:8px}
+.stitle{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-1px;margin-bottom:20px}
+
+/* Project layout: graphic left, content right */
+.proj-layout{display:flex;gap:24px;align-items:stretch}
+.proj-graphic{flex:0 0 280px;min-height:280px;border-radius:14px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.proj-graphic svg{width:100%;height:100%}
+.proj-detail{flex:1;min-width:0}
+.proj{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.proj-num{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase}
+.proj-title{font-size:clamp(1.1rem,2vw,1.4rem);font-weight:700;letter-spacing:-.3px;margin:4px 0}
+.proj-org{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
+.proj-tag{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--muted)}
+.proj-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin:12px 0 4px}
+.proj-text{font-size:12px;line-height:1.65;color:var(--muted)}
+.proj-bullets{list-style:none;padding:0}
+.proj-bullets li{font-size:11.5px;line-height:1.55;color:var(--muted);padding:3px 0 3px 14px;position:relative}
+.proj-bullets li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%}
+.proj-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.pm{background:rgba(255,255,255,.03);border-radius:6px;padding:10px 4px;text-align:center}
+.pm-v{font-size:15px;font-weight:700}
+.pm-l{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.impact{border-radius:8px;padding:12px 14px;margin-top:10px;font-size:11px;line-height:1.55;color:var(--muted)}
+.impact strong{font-weight:700}
+.proj-scroll{max-height:80vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent) transparent}
+.proj-scroll::-webkit-scrollbar{width:3px}
+.proj-scroll::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* Skills */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.sk{background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:10px;padding:14px;transition:border-color .3s}
+.sk:hover{border-color:var(--accent)}
+.sk-cat{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.sk-val{font-size:11px;color:var(--muted);line-height:1.55}
+.edu-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.edu-item:last-child{border-bottom:none}
+.edu-deg{font-weight:600;font-size:13px}
+.edu-sch{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
+.footer-text{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center;margin-top:30px;letter-spacing:2px;text-transform:uppercase}
+
+/* Graphic animations */
+@keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(280px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes pulse2{0%,100%{r:3}50%{r:5}}
+@keyframes dash{to{stroke-dashoffset:-20}}
+@keyframes fadeLoop{0%,100%{opacity:.3}50%{opacity:.9}}
+
+@media(max-width:700px){
+  .proj-layout{flex-direction:column}
+  .proj-graphic{flex:none;height:200px}
+  .metrics-grid,.proj-metrics{grid-template-columns:repeat(2,1fr)}
+  .skills-grid{grid-template-columns:1fr}
+  .proj{padding:20px}
+  .section-inner{padding:0 14px}
+  .nav-dots{right:10px;gap:7px}
+  .nav-dot{width:7px;height:7px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot active" data-idx="0" title="Home"></button>
+  <button class="nav-dot" data-idx="1" title="Overview"></button>
+  <button class="nav-dot" data-idx="2" title="Defect Detection"></button>
+  <button class="nav-dot" data-idx="3" title="YOLOv9c"></button>
+  <button class="nav-dot" data-idx="4" title="KAN Research"></button>
+  <button class="nav-dot" data-idx="5" title="RAGForecaster"></button>
+  <button class="nav-dot" data-idx="6" title="Skills"></button>
+</nav>
+<canvas id="c"></canvas>
+
+<!-- S0: Hero -->
+<div class="section visible" id="s0">
+<div class="section-inner"><div class="hero-content">
+  <div class="hero-name">Khushboo<br>Kumari</div>
+  <div class="hero-role">Machine Learning Engineer</div>
+  <div class="hero-line"></div>
+  <div class="hero-links">
+    <a href="mailto:khushbooshaurya@gmail.com">Email</a>
+    <a href="https://github.com/khushbooshaurya5">GitHub</a>
+    <a href="https://www.linkedin.com/in/khushboo-kumari-5053a9b7/">LinkedIn</a>
+  </div>
+  <div class="hero-scroll">Scroll to explore<span></span></div>
+</div></div></div>
+
+<!-- S1: Overview -->
+<div class="section" id="s1">
+<div class="section-inner">
+  <div class="slabel">Overview</div>
+  <div class="stitle">Building production ML — from semiconductor labs to open source.</div>
+  <p class="proj-text" style="margin-bottom:20px">M.Sc. ML & Data Analytics at Aalen University. 2+ years shipping end-to-end ML: computer vision pipelines, LLM applications, explainable AI research.</p>
+  <div class="metrics-grid">
+    <div class="m-box"><div class="m-val" style="color:var(--accent)">4</div><div class="m-label">Projects</div></div>
+    <div class="m-box"><div class="m-val" style="color:var(--green)">94%</div><div class="m-label">Best Accuracy</div></div>
+    <div class="m-box"><div class="m-val" style="color:var(--blue)">10×</div><div class="m-label">Precision Gain</div></div>
+    <div class="m-box"><div class="m-val" style="color:var(--accent2)">70%</div><div class="m-label">Time Saved</div></div>
+  </div>
+</div></div>
+
+<!-- S2: TASC -->
+<div class="section" id="s2">
+<div class="section-inner"><div class="proj-scroll">
+  <div class="proj-layout">
+    <!-- Wafer Heatmap Graphic -->
+    <div class="proj-graphic" style="background:rgba(232,54,78,.04);border:1px solid rgba(232,54,78,.15)">
+      <svg viewBox="0 0 280 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="wg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8364e" stop-opacity=".6"/><stop offset="100%" stop-color="#e8364e" stop-opacity="0"/></radialGradient>
+          <clipPath id="waferClip"><circle cx="140" cy="150" r="110"/></clipPath>
+        </defs>
+        <!-- Wafer disk -->
+        <circle cx="140" cy="150" r="112" fill="none" stroke="#e8364e" stroke-width=".5" opacity=".4"/>
+        <circle cx="140" cy="150" r="110" fill="rgba(232,54,78,.03)"/>
+        <!-- Grid lines -->
+        <g clip-path="url(#waferClip)" opacity=".15" stroke="#e8364e" stroke-width=".3">
+          <line x1="30" y1="80" x2="250" y2="80"/><line x1="30" y1="110" x2="250" y2="110"/>
+          <line x1="30" y1="140" x2="250" y2="140"/><line x1="30" y1="170" x2="250" y2="170"/>
+          <line x1="30" y1="200" x2="250" y2="200"/><line x1="30" y1="230" x2="250" y2="230"/>
+          <line x1="70" y1="40" x2="70" y2="260"/><line x1="105" y1="40" x2="105" y2="260"/>
+          <line x1="140" y1="40" x2="140" y2="260"/><line x1="175" y1="40" x2="175" y2="260"/>
+          <line x1="210" y1="40" x2="210" y2="260"/>
+        </g>
+        <!-- Heatmap cells (defect regions) -->
+        <g clip-path="url(#waferClip)">
+          <rect x="70" y="80" width="35" height="30" rx="2" fill="#3dd68c" opacity=".25"/>
+          <rect x="105" y="80" width="35" height="30" rx="2" fill="#3dd68c" opacity=".35"/>
+          <rect x="140" y="80" width="35" height="30" rx="2" fill="#4e9bff" opacity=".2"/>
+          <rect x="175" y="80" width="35" height="30" rx="2" fill="#3dd68c" opacity=".3"/>
+          <rect x="70" y="110" width="35" height="30" rx="2" fill="#4e9bff" opacity=".2"/>
+          <rect x="105" y="110" width="35" height="30" rx="2" fill="#e8364e" opacity=".5"><animate attributeName="opacity" values=".3;.6;.3" dur="2s" repeatCount="indefinite"/></rect>
+          <rect x="140" y="110" width="35" height="30" rx="2" fill="#ff6b35" opacity=".4"><animate attributeName="opacity" values=".25;.5;.25" dur="2.5s" repeatCount="indefinite"/></rect>
+          <rect x="175" y="110" width="35" height="30" rx="2" fill="#3dd68c" opacity=".25"/>
+          <rect x="70" y="140" width="35" height="30" rx="2" fill="#3dd68c" opacity=".2"/>
+          <rect x="105" y="140" width="35" height="30" rx="2" fill="#ff6b35" opacity=".35"><animate attributeName="opacity" values=".2;.45;.2" dur="3s" repeatCount="indefinite"/></rect>
+          <rect x="140" y="140" width="35" height="30" rx="2" fill="#e8364e" opacity=".55"><animate attributeName="opacity" values=".35;.65;.35" dur="1.8s" repeatCount="indefinite"/></rect>
+          <rect x="175" y="140" width="35" height="30" rx="2" fill="#ff6b35" opacity=".3"/>
+          <rect x="70" y="170" width="35" height="30" rx="2" fill="#4e9bff" opacity=".15"/>
+          <rect x="105" y="170" width="35" height="30" rx="2" fill="#3dd68c" opacity=".2"/>
+          <rect x="140" y="170" width="35" height="30" rx="2" fill="#ff6b35" opacity=".3"/>
+          <rect x="175" y="170" width="35" height="30" rx="2" fill="#3dd68c" opacity=".35"/>
+          <rect x="105" y="200" width="35" height="30" rx="2" fill="#3dd68c" opacity=".25"/>
+          <rect x="140" y="200" width="35" height="30" rx="2" fill="#4e9bff" opacity=".2"/>
+        </g>
+        <!-- Scan line -->
+        <g clip-path="url(#waferClip)">
+          <rect x="30" y="0" width="220" height="2" fill="#e8364e" opacity=".6">
+            <animateTransform attributeName="transform" type="translate" values="0,-10;0,280;0,-10" dur="4s" repeatCount="indefinite"/>
+          </rect>
+        </g>
+        <!-- Crosshair on defect -->
+        <circle cx="157" cy="150" r="12" fill="none" stroke="#e8364e" stroke-width="1" opacity=".7" stroke-dasharray="3 3">
+          <animate attributeName="r" values="10;14;10" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <line x1="157" y1="134" x2="157" y2="166" stroke="#e8364e" stroke-width=".5" opacity=".5"/>
+        <line x1="141" y1="150" x2="173" y2="150" stroke="#e8364e" stroke-width=".5" opacity=".5"/>
+        <!-- Quadrant labels -->
+        <text x="90" y="70" fill="#e8364e" font-family="IBM Plex Mono" font-size="8" opacity=".5">Q1</text>
+        <text x="190" y="70" fill="#e8364e" font-family="IBM Plex Mono" font-size="8" opacity=".5">Q2</text>
+        <text x="90" y="248" fill="#e8364e" font-family="IBM Plex Mono" font-size="8" opacity=".5">Q3</text>
+        <text x="190" y="248" fill="#e8364e" font-family="IBM Plex Mono" font-size="8" opacity=".5">Q4</text>
+        <!-- Label -->
+        <text x="140" y="285" fill="#e8364e" font-family="IBM Plex Mono" font-size="9" text-anchor="middle" opacity=".7">WAFER SURFACE ANALYSIS</text>
+      </svg>
+    </div>
+    <!-- Content -->
+    <div class="proj-detail">
+      <div class="proj" style="border-left:3px solid var(--accent);height:100%">
+        <div class="proj-num" style="color:var(--accent)">Project 01</div>
+        <div class="proj-title">Semiconductor Defect Detection Pipeline</div>
+        <div class="proj-org">Carl Zeiss SMT · Nov 2025 – Present · Oberkochen</div>
+        <div class="proj-tags"><span class="proj-tag">Python</span><span class="proj-tag">OpenCV</span><span class="proj-tag">scikit-learn</span><span class="proj-tag">HDF5</span><span class="proj-tag">PyTorch</span></div>
+        <div class="proj-lbl" style="color:var(--accent)">Key Results</div>
+        <ul class="proj-bullets">
+          <li style="--c:var(--accent)">Polar coordinate correction: 10× accuracy (r=0.011 → 0.598)</li>
+          <li style="--c:var(--accent)">94% defect classification on 400+ points, 4 collectors</li>
+          <li style="--c:var(--accent)">Hough Circle ROI detection — 50% calibration time cut</li>
+          <li style="--c:var(--accent)">Modular Python framework adopted as team standard</li>
+        </ul>
+        <style>.proj-bullets li::before{background:var(--c,var(--accent))}</style>
+        <div class="proj-metrics">
+          <div class="pm"><div class="pm-v" style="color:var(--green)">94%</div><div class="pm-l">Accuracy</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--blue)">10×</div><div class="pm-l">Precision</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--accent2)">50%</div><div class="pm-l">Time Cut</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--teal)">400+</div><div class="pm-l">Points</div></div>
+        </div>
+        <div class="impact" style="background:rgba(232,54,78,.06);border:1px solid rgba(232,54,78,.12)"><strong style="color:var(--accent)">Impact:</strong> Baseline for EUV lithography inspection. Presented to 8+ scientists.</div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- S3: YOLO -->
+<div class="section" id="s3">
+<div class="section-inner"><div class="proj-scroll">
+  <div class="proj-layout">
+    <!-- Detection Grid Graphic -->
+    <div class="proj-graphic" style="background:rgba(78,155,255,.04);border:1px solid rgba(78,155,255,.15)">
+      <svg viewBox="0 0 280 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- IC chip background -->
+        <rect x="30" y="30" width="220" height="220" rx="6" fill="rgba(78,155,255,.05)" stroke="#4e9bff" stroke-width=".5" opacity=".5"/>
+        <!-- Grid pattern (die/pads) -->
+        <g opacity=".2" stroke="#4e9bff" stroke-width=".3">
+          <line x1="30" y1="74" x2="250" y2="74"/><line x1="30" y1="118" x2="250" y2="118"/>
+          <line x1="30" y1="162" x2="250" y2="162"/><line x1="30" y1="206" x2="250" y2="206"/>
+          <line x1="74" y1="30" x2="74" y2="250"/><line x1="118" y1="30" x2="118" y2="250"/>
+          <line x1="162" y1="30" x2="162" y2="250"/><line x1="206" y1="30" x2="206" y2="250"/>
+        </g>
+        <!-- Bondpads (small rects) -->
+        <g fill="rgba(78,155,255,.15)">
+          <rect x="42" y="42" width="24" height="24" rx="2"/><rect x="82" y="42" width="24" height="24" rx="2"/>
+          <rect x="126" y="42" width="24" height="24" rx="2"/><rect x="170" y="42" width="24" height="24" rx="2"/>
+          <rect x="214" y="42" width="24" height="24" rx="2"/>
+          <rect x="42" y="86" width="24" height="24" rx="2"/><rect x="126" y="86" width="24" height="24" rx="2"/>
+          <rect x="214" y="86" width="24" height="24" rx="2"/>
+          <rect x="42" y="130" width="24" height="24" rx="2"/><rect x="82" y="130" width="24" height="24" rx="2"/>
+          <rect x="170" y="130" width="24" height="24" rx="2"/><rect x="214" y="130" width="24" height="24" rx="2"/>
+          <rect x="42" y="174" width="24" height="24" rx="2"/><rect x="126" y="174" width="24" height="24" rx="2"/>
+          <rect x="214" y="174" width="24" height="24" rx="2"/>
+          <rect x="42" y="218" width="24" height="24" rx="2"/><rect x="82" y="218" width="24" height="24" rx="2"/>
+          <rect x="126" y="218" width="24" height="24" rx="2"/><rect x="170" y="218" width="24" height="24" rx="2"/>
+          <rect x="214" y="218" width="24" height="24" rx="2"/>
+        </g>
+        <!-- YOLO bounding boxes (detected) -->
+        <rect x="78" y="82" width="32" height="32" rx="2" fill="none" stroke="#3dd68c" stroke-width="1.5">
+          <animate attributeName="stroke-opacity" values=".5;1;.5" dur="1.5s" repeatCount="indefinite"/>
+        </rect>
+        <text x="80" y="80" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" opacity=".8">0.97</text>
+        <rect x="122" y="126" width="32" height="32" rx="2" fill="none" stroke="#3dd68c" stroke-width="1.5">
+          <animate attributeName="stroke-opacity" values=".5;1;.5" dur="1.8s" repeatCount="indefinite"/>
+        </rect>
+        <text x="124" y="124" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" opacity=".8">0.94</text>
+        <rect x="166" y="126" width="32" height="32" rx="2" fill="none" stroke="#ff6b35" stroke-width="1.5">
+          <animate attributeName="stroke-opacity" values=".4;.9;.4" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="168" y="124" fill="#ff6b35" font-family="IBM Plex Mono" font-size="7" opacity=".8">0.82</text>
+        <rect x="122" y="170" width="32" height="32" rx="2" fill="none" stroke="#3dd68c" stroke-width="1.5">
+          <animate attributeName="stroke-opacity" values=".5;1;.5" dur="1.6s" repeatCount="indefinite"/>
+        </rect>
+        <text x="124" y="168" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" opacity=".8">0.96</text>
+        <!-- Defect marker -->
+        <circle cx="183" cy="142" r="4" fill="none" stroke="#e8364e" stroke-width="1.5">
+          <animate attributeName="r" values="3;6;3" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values=".6;1;.6" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="190" y="140" fill="#e8364e" font-family="IBM Plex Mono" font-size="7" opacity=".7">DEFECT</text>
+        <!-- Scan progress -->
+        <rect x="30" y="262" width="220" height="4" rx="2" fill="rgba(78,155,255,.1)"/>
+        <rect x="30" y="262" width="0" height="4" rx="2" fill="#4e9bff" opacity=".6">
+          <animate attributeName="width" values="0;220;0" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <!-- Label -->
+        <text x="140" y="285" fill="#4e9bff" font-family="IBM Plex Mono" font-size="9" text-anchor="middle" opacity=".7">YOLO BONDPAD DETECTION</text>
+      </svg>
+    </div>
+    <div class="proj-detail">
+      <div class="proj" style="border-left:3px solid var(--blue);height:100%">
+        <div class="proj-num" style="color:var(--blue)">Project 02</div>
+        <div class="proj-title">YOLOv9c Bondpad Detection System</div>
+        <div class="proj-org">Matworks GmbH · May – Oct 2025 · Aalen</div>
+        <div class="proj-tags"><span class="proj-tag">YOLOv9c</span><span class="proj-tag">ONNX</span><span class="proj-tag">Python</span><span class="proj-tag">OpenCV</span><span class="proj-tag">ZEN</span></div>
+        <div class="proj-lbl" style="color:var(--blue)">Key Results</div>
+        <ul class="proj-bullets">
+          <li style="--c:var(--blue)">ONNX pipeline: 2592×2592 input, letterbox, coordinate remap</li>
+          <li style="--c:var(--blue)">Silent CLI integrated with ZEN microscope workflow</li>
+          <li style="--c:var(--blue)">70% reduction in manual IC analysis, 1,000+ components</li>
+          <li style="--c:var(--blue)">Full ownership: prototype → CLI → microscope deploy</li>
+        </ul>
+        <div class="proj-metrics">
+          <div class="pm"><div class="pm-v" style="color:var(--accent)">70%</div><div class="pm-l">Time Saved</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--blue)">1000+</div><div class="pm-l">Components</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--green)">2592px</div><div class="pm-l">Resolution</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--purple)">CLI</div><div class="pm-l">Production</div></div>
+        </div>
+        <div class="impact" style="background:rgba(78,155,255,.06);border:1px solid rgba(78,155,255,.12)"><strong style="color:var(--blue)">Impact:</strong> Standard inspection tool. Full lifecycle ownership.</div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- S4: KAN -->
+<div class="section" id="s4">
+<div class="section-inner"><div class="proj-scroll">
+  <div class="proj-layout">
+    <!-- KAN Network Graphic -->
+    <div class="proj-graphic" style="background:rgba(167,139,250,.04);border:1px solid rgba(167,139,250,.15)">
+      <svg viewBox="0 0 280 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Connections (spline-like curves) -->
+        <g stroke-width=".8" fill="none" opacity=".35">
+          <path d="M60,80 C120,60 160,100 200,90" stroke="#a78bfa"/><path d="M60,80 C110,90 150,130 200,130" stroke="#4e9bff"/>
+          <path d="M60,80 C100,110 160,160 200,170" stroke="#a78bfa"/><path d="M60,80 C90,120 170,200 200,210" stroke="#4e9bff"/>
+          <path d="M60,120 C110,100 150,90 200,90" stroke="#4e9bff"/><path d="M60,120 C120,120 160,130 200,130" stroke="#a78bfa"/>
+          <path d="M60,120 C110,140 160,170 200,170" stroke="#a78bfa"/><path d="M60,120 C100,150 170,200 200,210" stroke="#4e9bff"/>
+          <path d="M60,160 C110,140 150,100 200,90" stroke="#a78bfa"/><path d="M60,160 C120,150 160,140 200,130" stroke="#4e9bff"/>
+          <path d="M60,160 C110,170 160,170 200,170" stroke="#a78bfa"/><path d="M60,160 C100,180 170,200 200,210" stroke="#4e9bff"/>
+          <path d="M60,200 C110,180 150,110 200,90" stroke="#4e9bff"/><path d="M60,200 C120,190 160,150 200,130" stroke="#a78bfa"/>
+          <path d="M60,200 C110,200 160,180 200,170" stroke="#4e9bff"/><path d="M60,200 C100,210 170,210 200,210" stroke="#a78bfa"/>
+          <!-- Hidden to output -->
+          <path d="M200,90 C220,100 230,120 250,130" stroke="#3dd68c"/><path d="M200,90 C220,90 240,180 250,190" stroke="#3dd68c" opacity=".2"/>
+          <path d="M200,130 C220,130 235,130 250,130" stroke="#3dd68c"/><path d="M200,130 C220,150 240,180 250,190" stroke="#3dd68c" opacity=".3"/>
+          <path d="M200,170 C220,160 235,140 250,130" stroke="#3dd68c" opacity=".3"/><path d="M200,170 C220,175 240,185 250,190" stroke="#3dd68c"/>
+          <path d="M200,210 C220,200 235,150 250,130" stroke="#3dd68c" opacity=".2"/><path d="M200,210 C220,205 240,195 250,190" stroke="#3dd68c"/>
+        </g>
+        <!-- Animated data flow along connections -->
+        <g>
+          <circle r="2.5" fill="#a78bfa" opacity=".8"><animateMotion dur="3s" repeatCount="indefinite" path="M60,120 C120,120 160,130 200,130"/></circle>
+          <circle r="2.5" fill="#4e9bff" opacity=".8"><animateMotion dur="2.5s" repeatCount="indefinite" path="M60,160 C110,170 160,170 200,170"/></circle>
+          <circle r="2" fill="#3dd68c" opacity=".8"><animateMotion dur="2s" repeatCount="indefinite" path="M200,130 C220,130 235,130 250,130"/></circle>
+          <circle r="2" fill="#3dd68c" opacity=".8"><animateMotion dur="2.2s" repeatCount="indefinite" path="M200,170 C220,175 240,185 250,190"/></circle>
+        </g>
+        <!-- Input nodes -->
+        <g>
+          <circle cx="60" cy="80" r="8" fill="rgba(78,155,255,.15)" stroke="#4e9bff" stroke-width="1"/>
+          <circle cx="60" cy="120" r="8" fill="rgba(78,155,255,.15)" stroke="#4e9bff" stroke-width="1"/>
+          <circle cx="60" cy="160" r="8" fill="rgba(78,155,255,.15)" stroke="#4e9bff" stroke-width="1"/>
+          <circle cx="60" cy="200" r="8" fill="rgba(78,155,255,.15)" stroke="#4e9bff" stroke-width="1"/>
+          <text x="28" y="144" fill="#4e9bff" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" transform="rotate(-90,28,144)" opacity=".6">INPUT</text>
+        </g>
+        <!-- Hidden nodes (KAN with spline indicator) -->
+        <g>
+          <circle cx="200" cy="90" r="10" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="200" y="93" fill="#a78bfa" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">~</text>
+          <circle cx="200" cy="130" r="10" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="200" y="133" fill="#a78bfa" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">~</text>
+          <circle cx="200" cy="170" r="10" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="200" y="173" fill="#a78bfa" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">~</text>
+          <circle cx="200" cy="210" r="10" fill="rgba(167,139,250,.12)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="200" y="213" fill="#a78bfa" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">~</text>
+        </g>
+        <!-- Output nodes -->
+        <g>
+          <circle cx="250" cy="130" r="8" fill="rgba(61,214,140,.12)" stroke="#3dd68c" stroke-width="1"/>
+          <circle cx="250" cy="190" r="8" fill="rgba(61,214,140,.12)" stroke="#3dd68c" stroke-width="1"/>
+          <text x="268" y="164" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" transform="rotate(90,268,164)" opacity=".6">SL SCORES</text>
+        </g>
+        <!-- Layer labels -->
+        <text x="60" y="234" fill="#4e9bff" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" opacity=".5">Features</text>
+        <text x="200" y="240" fill="#a78bfa" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" opacity=".5">B-spline</text>
+        <!-- Variant labels -->
+        <g opacity=".5">
+          <rect x="50" y="258" width="55" height="16" rx="3" fill="rgba(167,139,250,.1)" stroke="#a78bfa" stroke-width=".5"/>
+          <text x="77" y="269" fill="#a78bfa" font-family="IBM Plex Mono" font-size="7" text-anchor="middle">B-spline</text>
+          <rect x="112" y="258" width="55" height="16" rx="3" fill="rgba(78,155,255,.1)" stroke="#4e9bff" stroke-width=".5"/>
+          <text x="139" y="269" fill="#4e9bff" font-family="IBM Plex Mono" font-size="7" text-anchor="middle">ChebyKAN</text>
+          <rect x="174" y="258" width="55" height="16" rx="3" fill="rgba(61,214,140,.1)" stroke="#3dd68c" stroke-width=".5"/>
+          <text x="201" y="269" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" text-anchor="middle">FasterKAN</text>
+        </g>
+        <text x="140" y="292" fill="#a78bfa" font-family="IBM Plex Mono" font-size="9" text-anchor="middle" opacity=".7">KAN ARCHITECTURE</text>
+      </svg>
+    </div>
+    <div class="proj-detail">
+      <div class="proj" style="border-left:3px solid var(--purple);height:100%">
+        <div class="proj-num" style="color:var(--purple)">Project 03</div>
+        <div class="proj-title">KAN for Cancer Gene Prediction</div>
+        <div class="proj-org">Hochschule Aalen · Prof. Dr. Csiszár · May – Sep 2025</div>
+        <div class="proj-tags"><span class="proj-tag">PyTorch</span><span class="proj-tag">KAN</span><span class="proj-tag">ChebyKAN</span><span class="proj-tag">FasterKAN</span><span class="proj-tag">Symbolic Reg.</span></div>
+        <div class="proj-lbl" style="color:var(--purple)">Key Results</div>
+        <ul class="proj-bullets">
+          <li style="--c:var(--purple)">3 KAN variants × 7 SL targets, 5-fold CV with augmentation</li>
+          <li style="--c:var(--purple)">Wilcoxon p&lt;0.0001: full model &gt; reduced, all targets</li>
+          <li style="--c:var(--purple)">Symbolic formulas via auto_symbolic(), complexity 5–31</li>
+          <li style="--c:var(--purple)">International collaboration (Spain) for cancer treatment</li>
+        </ul>
+        <div class="proj-metrics">
+          <div class="pm"><div class="pm-v" style="color:var(--purple)">3</div><div class="pm-l">Variants</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--blue)">7</div><div class="pm-l">Targets</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--green)">10K+</div><div class="pm-l">Genes</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--accent)">p&lt;.0001</div><div class="pm-l">Sig.</div></div>
+        </div>
+        <div class="impact" style="background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.12)"><strong style="color:var(--purple)">Impact:</strong> Submitted to EEML 2026. Personalized cancer treatment research.</div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- S5: RAG -->
+<div class="section" id="s5">
+<div class="section-inner"><div class="proj-scroll">
+  <div class="proj-layout">
+    <!-- RAG Pipeline Graphic -->
+    <div class="proj-graphic" style="background:rgba(45,212,191,.04);border:1px solid rgba(45,212,191,.15)">
+      <svg viewBox="0 0 280 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- User query box -->
+        <rect x="90" y="20" width="100" height="32" rx="6" fill="rgba(78,155,255,.1)" stroke="#4e9bff" stroke-width="1"/>
+        <text x="140" y="40" fill="#4e9bff" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">User query</text>
+        <!-- Arrow down -->
+        <line x1="140" y1="52" x2="140" y2="70" stroke="#4e9bff" stroke-width="1" opacity=".5"/>
+        <polygon points="135,68 140,76 145,68" fill="#4e9bff" opacity=".5"/>
+        <!-- RAG Retrieval -->
+        <rect x="70" y="78" width="140" height="36" rx="8" fill="rgba(255,107,53,.08)" stroke="#ff6b35" stroke-width="1"/>
+        <text x="140" y="94" fill="#ff6b35" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">RAG retrieval</text>
+        <text x="140" y="106" fill="#ff6b35" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" opacity=".5">vector search + context</text>
+        <!-- Knowledge base (side) -->
+        <rect x="15" y="82" width="44" height="28" rx="4" fill="rgba(255,107,53,.06)" stroke="#ff6b35" stroke-width=".5" opacity=".6"/>
+        <text x="37" y="98" fill="#ff6b35" font-family="IBM Plex Mono" font-size="6" text-anchor="middle" opacity=".6">TS KB</text>
+        <line x1="59" y1="96" x2="70" y2="96" stroke="#ff6b35" stroke-width=".5" opacity=".4" stroke-dasharray="3 2"/>
+        <!-- Arrow down -->
+        <line x1="140" y1="114" x2="140" y2="132" stroke="#ff6b35" stroke-width="1" opacity=".5"/>
+        <polygon points="135,130 140,138 145,130" fill="#ff6b35" opacity=".5"/>
+        <!-- LLM Reasoning (big glowing box) -->
+        <rect x="55" y="140" width="170" height="50" rx="10" fill="rgba(232,54,78,.06)" stroke="#e8364e" stroke-width="1.2">
+          <animate attributeName="stroke-opacity" values=".5;1;.5" dur="2s" repeatCount="indefinite"/>
+        </rect>
+        <text x="140" y="162" fill="#e8364e" font-family="Syne" font-size="12" font-weight="700" text-anchor="middle">LLM reasoning</text>
+        <text x="140" y="180" fill="#e8364e" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" opacity=".5">select · configure · explain</text>
+        <!-- Animated thinking dots -->
+        <circle cx="108" cy="170" r="2" fill="#e8364e" opacity=".3"><animate attributeName="opacity" values=".2;.8;.2" dur="1.5s" repeatCount="indefinite"/></circle>
+        <circle cx="118" cy="170" r="2" fill="#e8364e" opacity=".3"><animate attributeName="opacity" values=".2;.8;.2" dur="1.5s" begin=".3s" repeatCount="indefinite"/></circle>
+        <circle cx="128" cy="170" r="2" fill="#e8364e" opacity=".3"><animate attributeName="opacity" values=".2;.8;.2" dur="1.5s" begin=".6s" repeatCount="indefinite"/></circle>
+        <!-- Arrow down -->
+        <line x1="140" y1="190" x2="140" y2="208" stroke="#e8364e" stroke-width="1" opacity=".5"/>
+        <polygon points="135,206 140,214 145,206" fill="#e8364e" opacity=".5"/>
+        <!-- Forecast Output -->
+        <rect x="70" y="216" width="140" height="36" rx="8" fill="rgba(61,214,140,.08)" stroke="#3dd68c" stroke-width="1"/>
+        <text x="140" y="232" fill="#3dd68c" font-family="IBM Plex Mono" font-size="9" text-anchor="middle">Forecast output</text>
+        <text x="140" y="244" fill="#3dd68c" font-family="IBM Plex Mono" font-size="7" text-anchor="middle" opacity=".5">predictions + explanation</text>
+        <!-- sktime badge -->
+        <rect x="222" y="224" width="44" height="20" rx="4" fill="rgba(45,212,191,.08)" stroke="#2dd4bf" stroke-width=".5" opacity=".6"/>
+        <text x="244" y="237" fill="#2dd4bf" font-family="IBM Plex Mono" font-size="6" text-anchor="middle" opacity=".7">sktime</text>
+        <line x1="210" y1="234" x2="222" y2="234" stroke="#2dd4bf" stroke-width=".5" opacity=".4" stroke-dasharray="3 2"/>
+        <!-- Data flow particles -->
+        <circle r="2" fill="#4e9bff" opacity=".7"><animate attributeName="cy" values="52;76" dur="1s" repeatCount="indefinite"/><animate attributeName="cx" values="140;140" dur="1s" repeatCount="indefinite"/></circle>
+        <circle r="2" fill="#ff6b35" opacity=".7"><animate attributeName="cy" values="114;138" dur="1s" repeatCount="indefinite" begin=".3s"/><animate attributeName="cx" values="140;140" dur="1s" repeatCount="indefinite"/></circle>
+        <circle r="2" fill="#3dd68c" opacity=".7"><animate attributeName="cy" values="190;214" dur="1s" repeatCount="indefinite" begin=".6s"/><animate attributeName="cx" values="140;140" dur="1s" repeatCount="indefinite"/></circle>
+        <text x="140" y="280" fill="#2dd4bf" font-family="IBM Plex Mono" font-size="9" text-anchor="middle" opacity=".7">RAG FORECASTER PIPELINE</text>
+      </svg>
+    </div>
+    <div class="proj-detail">
+      <div class="proj" style="border-left:3px solid var(--teal);height:100%">
+        <div class="proj-num" style="color:var(--teal)">Project 04</div>
+        <div class="proj-title">RAGForecaster: LLM Forecasting Agent</div>
+        <div class="proj-org">GSoC 2026 · sktime / GC.OS · Feb 2026 – Present</div>
+        <div class="proj-tags"><span class="proj-tag">LangChain</span><span class="proj-tag">RAG</span><span class="proj-tag">LLMs</span><span class="proj-tag">sktime</span><span class="proj-tag">Hugging Face</span></div>
+        <div class="proj-lbl" style="color:var(--teal)">Key Results</div>
+        <ul class="proj-bullets">
+          <li style="--c:var(--teal)">RAGForecaster: RAG + statistical forecasting in sktime API</li>
+          <li style="--c:var(--teal)">NL query → model selection → forecast → explanation</li>
+          <li style="--c:var(--teal)">PR to sktime (#9721) + LangChain chatbot (C2SI PR #164)</li>
+          <li style="--c:var(--teal)">End-to-end LLM app with production API patterns</li>
+        </ul>
+        <div class="proj-metrics">
+          <div class="pm"><div class="pm-v" style="color:var(--teal)">RAG</div><div class="pm-l">Architecture</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--purple)">LLM</div><div class="pm-l">Engine</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--blue)">sktime</div><div class="pm-l">Integration</div></div>
+          <div class="pm"><div class="pm-v" style="color:var(--green)">OSS</div><div class="pm-l">Open Source</div></div>
+        </div>
+        <div class="impact" style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.12)"><strong style="color:var(--teal)">Impact:</strong> End-to-end LLM application: RAG architecture, LangChain integration, and production API design patterns for real-world AI-powered tools.</div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- S6: Skills -->
+<div class="section" id="s6">
+<div class="section-inner"><div class="proj-scroll">
+  <div class="slabel">Technical Skills</div>
+  <div class="stitle">The toolkit.</div>
+  <div class="skills-grid">
+    <div class="sk"><div class="sk-cat">ML / Deep Learning</div><div class="sk-val">PyTorch, scikit-learn, KAN, Random Forest, LightGBM, YOLO, ONNX, Transformers</div></div>
+    <div class="sk"><div class="sk-cat">Computer Vision</div><div class="sk-val">OpenCV, segmentation, feature extraction, Hough Transform, HDF5</div></div>
+    <div class="sk"><div class="sk-cat">LLMs / GenAI</div><div class="sk-val">LangChain, RAG, GPT API, Claude API, Hugging Face, prompt engineering</div></div>
+    <div class="sk"><div class="sk-cat">Languages</div><div class="sk-val">Python (expert), SQL, Java, C++, TypeScript (basic), React (basic)</div></div>
+    <div class="sk"><div class="sk-cat">Data Engineering</div><div class="sk-val">Pandas, NumPy, HDF5, YAML, data drift detection, statistical analysis</div></div>
+    <div class="sk"><div class="sk-cat">DevOps / Tools</div><div class="sk-val">Git, Docker, PyInstaller, CI/CD, REST APIs, CLI tooling</div></div>
+  </div>
+  <div class="edu" style="margin-top:20px">
+    <div class="slabel">Education</div>
+    <div class="edu-item"><div class="edu-deg">M.Sc. Machine Learning and Data Analytics</div><div class="edu-sch">Aalen University · 2025 – Present</div></div>
+    <div class="edu-item"><div class="edu-deg">B.Tech Computer Science and Engineering</div><div class="edu-sch">KIIT University, India · 2018–2022 · GPA: 1.8 (German Scale)</div></div>
+  </div>
+  <div style="display:flex;gap:20px;font-size:12px;color:var(--muted);margin-top:16px">
+    <span><strong style="color:var(--text)">English</strong> Fluent</span>
+    <span><strong style="color:var(--text)">Hindi</strong> Native</span>
+    <span><strong style="color:var(--text)">German</strong> Basic</span>
+  </div>
+  <div class="footer-text">Khushboo Kumari · ML Portfolio · 2026</div>
+</div></div></div>
+
+<div class="scroll-container" id="scrollContainer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const NS = 7;
+  const canvas = document.getElementById('c');
+  const R = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  R.setSize(window.innerWidth, window.innerHeight);
+  R.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  R.setClearColor(0x050507, 1);
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x050507, 0.007);
+  const cam = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const PL = 700;
+  const path = [];
+  for(let i=0;i<=200;i++){
+    const t=i/200;
+    path.push(new THREE.Vector3(
+      Math.sin(t*Math.PI*3)*18,
+      Math.cos(t*Math.PI*2)*10+Math.sin(t*Math.PI*5)*4,
+      -t*PL
+    ));
+  }
+  const PC = 5000;
+  const pG = new THREE.BufferGeometry();
+  const pp = new Float32Array(PC*3), pv = new Float32Array(PC*3), pc = new Float32Array(PC*3);
+  const pal = [[.91,.21,.30],[.31,.61,1],[.24,.84,.55],[1,.42,.21],[.65,.55,.98],[.18,.83,.75]];
+  for(let i=0;i<PC;i++){
+    const i3=i*3, t=Math.random(), idx=Math.floor(t*200), b=path[Math.min(idx,200)];
+    pp[i3]=b.x+(Math.random()-.5)*70; pp[i3+1]=b.y+(Math.random()-.5)*50; pp[i3+2]=b.z+(Math.random()-.5)*35;
+    pv[i3]=(Math.random()-.5)*.012; pv[i3+1]=(Math.random()-.5)*.012; pv[i3+2]=(Math.random()-.5)*.006;
+    const c=pal[Math.floor(Math.random()*pal.length)];
+    pc[i3]=c[0]; pc[i3+1]=c[1]; pc[i3+2]=c[2];
+  }
+  pG.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+  pG.setAttribute('color', new THREE.BufferAttribute(pc, 3));
+  const pM = new THREE.PointsMaterial({size:.4, vertexColors:true, transparent:true, opacity:.65, blending:THREE.AdditiveBlending, depthWrite:false});
+  const pts = new THREE.Points(pG, pM);
+  scene.add(pts);
+  const ML = 500;
+  const lG = new THREE.BufferGeometry();
+  const lp = new Float32Array(ML*6);
+  lG.setAttribute('position', new THREE.BufferAttribute(lp, 3));
+  lG.setDrawRange(0, 0);
+  scene.add(new THREE.LineSegments(lG, new THREE.LineBasicMaterial({color:0xe8364e, transparent:true, opacity:.05, blending:THREE.AdditiveBlending, depthWrite:false})));
+  const rc = [0xe8364e,0x4e9bff,0xa78bfa,0x2dd4bf,0x3dd68c,0xff6b35];
+  for(let i=0;i<25;i++){
+    const t=(i+1)/26, idx=Math.floor(t*200), b=path[Math.min(idx,200)];
+    const rg = new THREE.TorusGeometry(5+Math.random()*10, .06, 8, 40);
+    const rm = new THREE.MeshBasicMaterial({color:rc[i%rc.length], transparent:true, opacity:.1, blending:THREE.AdditiveBlending});
+    const ring = new THREE.Mesh(rg, rm);
+    ring.position.set(b.x+(Math.random()-.5)*25, b.y+(Math.random()-.5)*12, b.z);
+    ring.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+    ring.userData = {spd:.001+Math.random()*.002, ax:Math.random()>.5?'x':'z'};
+    scene.add(ring);
+  }
+  let mx=0, my=0;
+  document.addEventListener('mousemove', e=>{mx=(e.clientX/window.innerWidth-.5)*2; my=-(e.clientY/window.innerHeight-.5)*2;});
+  window.addEventListener('resize', ()=>{cam.aspect=window.innerWidth/window.innerHeight; cam.updateProjectionMatrix(); R.setSize(window.innerWidth, window.innerHeight);});
+  let sp=0, cs=0;
+  function gp(t){
+    t=Math.max(0,Math.min(1,t));
+    const f=t*200, i=Math.floor(f), fr=f-i;
+    return new THREE.Vector3().lerpVectors(path[Math.min(i,200)], path[Math.min(i+1,200)], fr);
+  }
+  function onScroll(){
+    const el=document.getElementById('scrollContainer');
+    const ms=el.offsetHeight-window.innerHeight;
+    sp=Math.max(0,Math.min(1,window.pageYOffset/ms));
+    document.getElementById('progressBar').style.width=(sp*100)+'%';
+    const ns=Math.min(Math.floor(sp*NS),NS-1);
+    if(ns!==cs){
+      document.getElementById('s'+cs).classList.remove('visible');
+      document.getElementById('s'+ns).classList.add('visible');
+      document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===ns));
+      cs=ns;
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  document.querySelectorAll('.nav-dot').forEach(d=>{
+    d.addEventListener('click',()=>{
+      const idx=parseInt(d.dataset.idx);
+      const el=document.getElementById('scrollContainer');
+      const ms=el.offsetHeight-window.innerHeight;
+      window.scrollTo({top:(idx/NS)*ms+10, behavior:'smooth'});
+    });
+  });
+  function animate(){
+    requestAnimationFrame(animate);
+    const cp=gp(sp), lk=gp(sp+.02);
+    cam.position.lerp(cp,.06);
+    cam.position.x+=mx*3.5; cam.position.y+=my*2.5;
+    cam.lookAt(new THREE.Vector3().lerpVectors(cam.position,lk,1));
+    const pos=pG.attributes.position.array;
+    for(let i=0;i<PC;i++){
+      const i3=i*3;
+      pos[i3]+=pv[i3]; pos[i3+1]+=pv[i3+1]; pos[i3+2]+=pv[i3+2];
+      if(Math.abs(pos[i3]-path[100].x)>55)pv[i3]*=-1;
+      if(Math.abs(pos[i3+1])>35)pv[i3+1]*=-1;
+    }
+    pG.attributes.position.needsUpdate=true;
+    let lc=0;
+    const la=lG.attributes.position.array;
+    const cz=cam.position.z, th=6.5;
+    for(let i=0;i<Math.min(PC,250)&&lc<ML;i++){
+      const i3=i*3;
+      if(Math.abs(pos[i3+2]-cz)>35)continue;
+      for(let j=i+1;j<Math.min(PC,250)&&lc<ML;j++){
+        const j3=j*3;
+        if(Math.abs(pos[j3+2]-cz)>35)continue;
+        const dx=pos[i3]-pos[j3],dy=pos[i3+1]-pos[j3+1],dz=pos[i3+2]-pos[j3+2];
+        if(dx*dx+dy*dy+dz*dz<th*th){
+          const li=lc*6;
+          la[li]=pos[i3];la[li+1]=pos[i3+1];la[li+2]=pos[i3+2];
+          la[li+3]=pos[j3];la[li+4]=pos[j3+1];la[li+5]=pos[j3+2];
+          lc++;
+        }
+      }
+    }
+    lG.setDrawRange(0,lc*2);
+    lG.attributes.position.needsUpdate=true;
+    scene.children.forEach(ch=>{if(ch.userData&&ch.userData.spd)ch.rotation[ch.userData.ax]+=ch.userData.spd;});
+    R.render(scene,cam);
+  }
+  cam.position.copy(path[0]);
+  animate();
+})();
+</script>
+</body>
+</html>
