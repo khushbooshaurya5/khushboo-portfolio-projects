@@ -539,14 +539,14 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         <div class="p-org rv">Carl Zeiss SMT<span class="dot"></span>Oberkochen<span class="dot"></span>Nov 2025 — Apr 2026</div>
         <h3 class="p-title rv rv-d1">Semiconductor Defect-Detection Pipeline</h3>
         <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can surface features from microscope imagery predict defects on semiconductor production mirrors reliably enough for engineers to trust?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">An end-to-end pipeline (built from scratch) ingesting <strong>HDF5</strong> microscope images, extracting <strong>six features per measurement point</strong> and linking them to WLI surface-roughness and defect labels. A per-collector dx/dy grid search fixed a coordinate mismatch, feeding a <strong>Random Forest</strong> classifier.</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">An end-to-end pipeline (built from scratch) ingesting <strong>HDF5</strong> microscope images, extracting <strong>six features per measurement point</strong> and linking them to WLI surface-roughness and defect labels. Image-processing and computer-vision algorithms handled pixel mapping; a per-collector dx/dy grid search with <strong>polar-to-pixel</strong> conversion and statistical pixel-offset detection fixed a coordinate mismatch, feeding a <strong>Random Forest</strong> classifier.</div></div>
         <div class="p-metrics rv rv-d2">
           <div class="pm"><div class="v" data-count="94" data-suffix="%">0%</div><div class="l">Defect Accuracy (RF)</div></div>
           <div class="pm"><div class="v">.598</div><div class="l">Corr. r (from .011)</div></div>
           <div class="pm"><div class="v" data-count="400" data-suffix="+">0</div><div class="l">Measurement Points</div></div>
           <div class="pm"><div class="v" data-count="50" data-suffix="%">0%</div><div class="l">Less Manual Work</div></div>
         </div>
-        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Reported honestly that severity prediction did <em>not</em> work — and shipped a modular <strong>Tkinter</strong> tool (plugin architecture, YAML config, logging, pyinstaller executables) so engineers could run analyses themselves.</div></div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Reported honestly that severity prediction did <em>not</em> work — and shipped a modular <strong>Tkinter</strong> image-processing frontend (plugin architecture, <strong>HDF5 / ORF / PNG</strong> inputs, YAML-based config, logging with file &amp; stdout redirection, pyinstaller executables) so engineers could run analyses themselves.</div></div>
         <div class="p-tags rv rv-d3"><span>Python</span><span>Random Forest</span><span>OpenCV</span><span>HDF5</span><span>Tkinter</span></div>
         <div class="p-links rv rv-d4"><span class="na">◆ Proprietary — Confidential</span></div>
       </div>
