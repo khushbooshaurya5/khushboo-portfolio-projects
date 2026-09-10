@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Khushboo Kumari — Machine Learning Research × Engineering</title>
-<meta name="description" content="Khushboo Kumari — Machine Learning researcher and engineer working at the intersection of research, computer vision and real-world industrial ML.">
+<meta name="description" content="Khushboo Kumari — Machine Learning engineer and researcher working across research and industry: computer vision, neural architectures, industrial ML and LLM / agentic systems.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..600&family=Space+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -122,7 +122,7 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .hero-sub .role{font-family:var(--serif);font-style:italic;font-weight:340;font-size:clamp(1.5rem,4vw,2.8rem);letter-spacing:-.01em}
 .hero-sub .role em{color:var(--accent);font-style:italic}
 .hero-sub .rx{color:var(--accent);font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.8rem)}
-.hero-statement{max-width:56ch;margin-top:34px;font-size:clamp(1rem,1.5vw,1.18rem);color:var(--ink-dim);line-height:1.62}
+.hero-statement{max-width:58ch;margin-top:34px;font-size:clamp(1rem,1.5vw,1.18rem);color:var(--ink-dim);line-height:1.62}
 .hero-statement .lead{color:var(--ink)}
 .hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
 .hero-tags span{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);
@@ -145,17 +145,17 @@ header.nav.scrolled .nav-in{padding-block:16px}
 /* ---------- work / projects ---------- */
 .work-index{margin-bottom:20px}
 .wi-row{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(16px,4vw,54px);align-items:center;
-  padding:clamp(18px,3vw,30px) 0;border-top:1px solid var(--line);position:relative;transition:padding-left .5s var(--ease)}
+  padding:clamp(16px,2.6vw,26px) 0;border-top:1px solid var(--line);position:relative;transition:padding-left .5s var(--ease)}
 .wi-row:last-child{border-bottom:1px solid var(--line)}
 .wi-row .wi-num{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:1px}
-.wi-row .wi-name{font-family:var(--serif);font-weight:340;font-size:clamp(1.5rem,4.4vw,3rem);line-height:1;letter-spacing:-.02em;transition:color .4s,transform .5s var(--ease)}
+.wi-row .wi-name{font-family:var(--serif);font-weight:340;font-size:clamp(1.4rem,4vw,2.7rem);line-height:1;letter-spacing:-.02em;transition:color .4s,transform .5s var(--ease)}
 .wi-row .wi-cat{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-align:right}
-.wi-row::before{content:'';position:absolute;left:-14px;top:0;height:100%;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .5s var(--ease)}
-.wi-row:hover{padding-left:20px}
-.wi-row:hover::before{transform:scaleY(1)}
-.wi-row:hover .wi-name{color:var(--accent)}
+.wi-row[href]::before{content:'';position:absolute;left:-14px;top:0;height:100%;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .5s var(--ease)}
+.wi-row[href]:hover{padding-left:20px}
+.wi-row[href]:hover::before{transform:scaleY(1)}
+.wi-row[href]:hover .wi-name{color:var(--accent)}
 .wi-arrow{font-family:var(--mono);color:var(--accent);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s var(--ease)}
-.wi-row:hover .wi-arrow{opacity:1;transform:none}
+.wi-row[href]:hover .wi-arrow{opacity:1;transform:none}
 
 .filters{display:flex;flex-wrap:wrap;gap:10px;margin:60px 0 44px}
 .filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
@@ -190,17 +190,17 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .proj:hover .proj-visual svg{transform:scale(1.055)}
 .proj-visual .pv-num{position:absolute;top:14px;left:16px;z-index:3;font-family:var(--serif);font-size:clamp(3rem,7vw,5.4rem);line-height:1;color:var(--ink);opacity:.08;font-weight:400;transition:opacity .5s,color .5s}
 .proj:hover .proj-visual .pv-num{opacity:.9;color:var(--accent)}
-.proj-visual .pv-tag{position:absolute;bottom:14px;right:16px;z-index:3;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.proj-visual .pv-tag{position:absolute;top:18px;right:16px;z-index:3;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
 .proj-body .p-org{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .proj-body .p-org .dot{width:4px;height:4px;background:var(--faint);border-radius:50%}
 .proj-body .p-title{font-family:var(--serif);font-weight:360;font-size:clamp(1.6rem,3.3vw,2.5rem);line-height:1.02;letter-spacing:-.02em;margin-bottom:22px}
 .p-field{margin:16px 0}
 .p-field .p-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.p-field .p-val{font-size:14.5px;line-height:1.62;color:var(--ink-dim);max-width:56ch}
+.p-field .p-val{font-size:14.5px;line-height:1.62;color:var(--ink-dim);max-width:58ch}
 .p-field .p-val strong{color:var(--ink);font-weight:500}
 .p-metrics{display:flex;flex-wrap:wrap;gap:26px;margin:26px 0 22px;padding-top:22px;border-top:1px solid var(--line)}
-.p-metrics .pm .v{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.3rem);font-weight:400;line-height:1;color:var(--ink)}
-.p-metrics .pm .v .u{color:var(--accent);font-size:.6em}
+.p-metrics .pm .v{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:400;line-height:1;color:var(--ink)}
+.p-metrics .pm .v .u{color:var(--accent);font-size:.62em}
 .p-metrics .pm .l{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:8px}
 .p-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .p-tags span{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;color:var(--muted);border:1px solid var(--line);padding:5px 9px}
@@ -208,7 +208,9 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .p-links a,.p-links span.na{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
 .p-links a{color:var(--ink);border-bottom:1px solid var(--accent-line);padding-bottom:3px;transition:color .3s,border-color .3s}
 .p-links a:hover{color:var(--accent)}
-.p-links span.na{color:var(--faint)}
+.p-links span.na{color:var(--muted)}
+
+.further{margin-top:clamp(60px,8vw,96px)}
 
 /* ---------- research ---------- */
 .res-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
@@ -220,7 +222,7 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .res-cell .rc-title{font-family:var(--serif);font-weight:360;font-size:clamp(1.25rem,2.3vw,1.7rem);line-height:1.05;letter-spacing:-.01em;margin:16px 0 12px}
 .res-cell .rc-desc{font-size:13.5px;line-height:1.6;color:var(--ink-dim);max-width:44ch}
 .res-cell .rc-kw{margin-top:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:1px;color:var(--muted)}
-.res-lead{max-width:58ch;font-family:var(--serif);font-weight:330;font-size:clamp(1.25rem,2.4vw,1.9rem);line-height:1.32;letter-spacing:-.01em;margin-bottom:52px;color:var(--ink)}
+.res-lead{max-width:60ch;font-family:var(--serif);font-weight:330;font-size:clamp(1.25rem,2.4vw,1.9rem);line-height:1.32;letter-spacing:-.01em;margin-bottom:52px;color:var(--ink)}
 .res-lead em{font-style:italic;color:var(--accent)}
 
 /* ---------- toolbox ---------- */
@@ -239,19 +241,18 @@ header.nav.scrolled .nav-in{padding-block:16px}
 
 /* ---------- experience timeline ---------- */
 .tl{position:relative;padding-left:clamp(20px,4vw,52px)}
-.tl::before{content:'';position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line);}
+.tl::before{content:'';position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line)}
 .tl-prog{position:absolute;left:4px;top:6px;width:1px;background:var(--accent);height:0;transition:height .1s linear}
 .tl-item{position:relative;padding:clamp(22px,3vw,38px) 0;border-bottom:1px solid var(--line)}
 .tl-item:last-child{border-bottom:none}
-.tl-item::before{content:'';position:absolute;left:calc(-1*clamp(20px,4vw,52px));top:calc(clamp(22px,3vw,38px) + 8px);
-  margin-left:0px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--muted);transition:all .4s var(--ease)}
-.tl-item[data-left]::before{left:calc(-1*clamp(20px,4vw,52px))}
+.tl-item::before{content:'';position:absolute;left:calc(-1*clamp(20px,4vw,52px) - 1.5px);top:calc(clamp(22px,3vw,38px) + 9px);
+  width:9px;height:9px;border-radius:50%;background:var(--bg);border:1.5px solid var(--muted);transition:all .4s var(--ease)}
 .tl-item:hover::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
 .tl-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline}
 .tl-org{font-family:var(--serif);font-weight:400;font-size:clamp(1.3rem,2.6vw,1.9rem);letter-spacing:-.01em;line-height:1.05}
 .tl-period{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--accent);white-space:nowrap}
 .tl-role{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:8px}
-.tl-impact{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-dim);max-width:64ch}
+.tl-impact{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--ink-dim);max-width:66ch}
 .tl-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
 .tl-tags span{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;color:var(--muted);border:1px solid var(--line);padding:4px 8px}
 
@@ -272,7 +273,10 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .edu-item .ed-deg{font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.15}
 .edu-item .ed-sch{font-size:13px;color:var(--muted);margin-top:4px}
 .edu-item .ed-when{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
-.langs{display:flex;gap:28px;flex-wrap:wrap;margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.honours{margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+.honours li{list-style:none;font-size:13.5px;color:var(--ink-dim);line-height:1.6;padding:5px 0 5px 18px;position:relative}
+.honours li::before{content:'—';position:absolute;left:0;color:var(--accent)}
+.langs{display:flex;gap:28px;flex-wrap:wrap;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
 .langs .lg{font-size:13px;color:var(--muted)}
 .langs .lg b{color:var(--ink);font-weight:500;font-family:var(--sans)}
 
@@ -306,8 +310,8 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
 
 /* ---------- responsive ---------- */
 @media(max-width:940px){
-  .proj,.proj:nth-child(even){grid-template-columns:1fr;gap:28px}
-  .proj:nth-child(even) .proj-visual{order:0}
+  .proj,.proj:nth-of-type(even){grid-template-columns:1fr;gap:28px}
+  .proj:nth-of-type(even) .proj-visual{order:0}
   .about-grid{grid-template-columns:1fr;gap:44px}
   .c-links{grid-template-columns:1fr 1fr}
 }
@@ -381,7 +385,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     <div class="hero-meta-top rv">
       <span>Machine Learning Engineer &amp; Researcher</span>
       <span>Aalen · Germany</span>
-      <span>Available — 2026</span>
+      <span>EU work-authorised · 2028</span>
     </div>
     <h1 class="hero-name" aria-label="Khushboo Kumari">
       <span class="ln"><span class="k1">Khushboo</span></span>
@@ -393,12 +397,12 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <span class="role"><em>Research</em> <span class="rx">×</span> Engineering</span>
     </div>
     <p class="hero-statement rv rv-d2">
-      <span class="lead">I build and investigate machine-learning systems</span> at the intersection of
-      research, computer vision and real-world engineering — from neural-network internals to
-      defect-detection pipelines running inside semiconductor labs.
+      <span class="lead">I build and investigate machine-learning systems</span> across research and industry —
+      from gravitational-lens detection in JWST imaging, to defect-detection pipelines on the semiconductor
+      line, with LLM and agentic systems in between.
     </p>
     <div class="hero-tags rv rv-d3">
-      <span>ML Research</span><span>Computer Vision</span><span>Neural Networks</span><span>Industrial ML</span>
+      <span>ML Research</span><span>Computer Vision</span><span>LLM &amp; Agentic AI</span><span>Industrial ML</span>
     </div>
   </div>
   <div class="hero-foot">
@@ -419,7 +423,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     <div class="sec-head">
       <div>
         <span class="eyebrow rv">Selected Work</span>
-        <h2 class="sec-title rv rv-d1" style="margin-top:20px">Four case studies, <em>research to production.</em></h2>
+        <h2 class="sec-title rv rv-d1" style="margin-top:20px">Case studies, <em>research to production.</em></h2>
       </div>
       <span class="sec-idx rv rv-d2">§ 01 — Index</span>
     </div>
@@ -427,23 +431,28 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     <div class="work-index">
       <a class="wi-row rv" href="#p1" data-cursor="link">
         <span class="wi-num">01</span>
-        <span class="wi-name">Semiconductor Defect Detection <span class="wi-arrow">↘</span></span>
-        <span class="wi-cat">Computer Vision · Industrial</span>
+        <span class="wi-name">Gravitational-Lens Detection <span class="wi-arrow">↘</span></span>
+        <span class="wi-cat">Research · Computer Vision</span>
       </a>
       <a class="wi-row rv" href="#p2" data-cursor="link">
         <span class="wi-num">02</span>
-        <span class="wi-name">YOLOv9c Bondpad Detection <span class="wi-arrow">↘</span></span>
-        <span class="wi-cat">Computer Vision · Deployment</span>
+        <span class="wi-name">Semiconductor Defect Detection <span class="wi-arrow">↘</span></span>
+        <span class="wi-cat">Industrial · Computer Vision</span>
       </a>
       <a class="wi-row rv" href="#p3" data-cursor="link">
         <span class="wi-num">03</span>
-        <span class="wi-name">KAN &amp; Symbolic Regression <span class="wi-arrow">↘</span></span>
-        <span class="wi-cat">Research · Neural Architectures</span>
+        <span class="wi-name">YOLOv9c &amp; Hyperspectral ML <span class="wi-arrow">↘</span></span>
+        <span class="wi-cat">Computer Vision · Deployment</span>
       </a>
       <a class="wi-row rv" href="#p4" data-cursor="link">
         <span class="wi-num">04</span>
-        <span class="wi-name">RAGForecaster (GSoC) <span class="wi-arrow">↘</span></span>
-        <span class="wi-cat">ML Engineering · LLMs</span>
+        <span class="wi-name">KAN &amp; Explainable AI <span class="wi-arrow">↘</span></span>
+        <span class="wi-cat">Research · Interpretability</span>
+      </a>
+      <a class="wi-row rv" href="#p5" data-cursor="link">
+        <span class="wi-num">05</span>
+        <span class="wi-name">Multimodal RAG Agent <span class="wi-arrow">↘</span></span>
+        <span class="wi-cat">LLM &amp; Agents · ML Engineering</span>
       </a>
     </div>
 
@@ -452,25 +461,69 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <button data-filter="research">Research</button>
       <button data-filter="cv">Computer Vision</button>
       <button data-filter="mle">ML Engineering</button>
+      <button data-filter="llm">LLM &amp; Agents</button>
     </div>
 
-    <!-- P1 -->
-    <article class="proj" id="p1" data-cat="cv mle">
-      <div class="proj-visual" data-cursor="view" data-label="Wafer">
-        <span class="pv-num">01</span><span class="pv-tag">Wafer Surface Analysis</span>
+    <!-- P1 — MPIA -->
+    <article class="proj" id="p1" data-cat="research cv">
+      <div class="proj-visual" data-cursor="view" data-label="Deep field">
+        <span class="pv-num">01</span><span class="pv-tag">Gravitational Lensing</span>
         <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <defs><clipPath id="wc"><circle cx="200" cy="160" r="128"/></clipPath></defs>
-          <circle cx="200" cy="160" r="130" stroke="#4A463F" stroke-width="1"/>
-          <circle cx="200" cy="160" r="128" fill="rgba(236,231,221,.02)"/>
-          <g clip-path="url(#wc)" stroke="#2b2925" stroke-width=".6">
-            <line x1="60" y1="80" x2="340" y2="80"/><line x1="60" y1="120" x2="340" y2="120"/>
-            <line x1="60" y1="160" x2="340" y2="160"/><line x1="60" y1="200" x2="340" y2="200"/>
-            <line x1="60" y1="240" x2="340" y2="240"/>
-            <line x1="100" y1="40" x2="100" y2="280"/><line x1="150" y1="40" x2="150" y2="280"/>
-            <line x1="200" y1="40" x2="200" y2="280"/><line x1="250" y1="40" x2="250" y2="280"/>
-            <line x1="300" y1="40" x2="300" y2="280"/>
+          <g fill="rgba(236,231,221,.30)">
+            <circle cx="40" cy="60" r="1.4"/><circle cx="88" cy="42" r="1"/><circle cx="130" cy="78" r="1.8"/>
+            <circle cx="180" cy="50" r="1.1"/><circle cx="238" cy="66" r="1.5"/><circle cx="300" cy="46" r="1.2"/>
+            <circle cx="352" cy="80" r="1.6"/><circle cx="60" cy="120" r="1.2"/><circle cx="112" cy="150" r="1.5"/>
+            <circle cx="258" cy="120" r="1.1"/><circle cx="322" cy="150" r="1.7"/><circle cx="150" cy="205" r="1.3"/>
+            <circle cx="70" cy="232" r="1.5"/><circle cx="205" cy="252" r="1.2"/><circle cx="282" cy="222" r="1.6"/>
+            <circle cx="342" cy="250" r="1.1"/><circle cx="100" cy="282" r="1.4"/><circle cx="244" cy="290" r="1.2"/>
+            <circle cx="30" cy="180" r="1"/><circle cx="372" cy="188" r="1.3"/><circle cx="120" cy="110" r="1"/>
           </g>
-          <g clip-path="url(#wc)" class="scanwrap">
+          <g stroke="#D9502E">
+            <g class="pulse-a"><circle cx="200" cy="150" r="27" stroke-width="1" stroke-dasharray="3 3"/></g>
+            <ellipse cx="200" cy="150" rx="16" ry="7" stroke-width="1.3"/>
+            <circle cx="200" cy="150" r="2.2" fill="#D9502E"/>
+            <circle cx="304" cy="152" r="10" stroke-width="1" stroke-dasharray="2 3" class="pulse-b"/>
+          </g>
+          <g stroke="#4A463F" stroke-width=".8">
+            <line x1="200" y1="108" x2="200" y2="122"/><line x1="200" y1="178" x2="200" y2="192"/>
+            <line x1="158" y1="150" x2="172" y2="150"/><line x1="228" y1="150" x2="242" y2="150"/>
+          </g>
+          <text x="200" y="302" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">JWST NIRCAM · SEMI-SUPERVISED ANOMALY DETECTION</text>
+        </svg>
+      </div>
+      <div class="proj-body">
+        <div class="p-org rv">Max Planck Institute for Astronomy<span class="dot"></span>Heidelberg<span class="dot"></span>Jun — Aug 2026</div>
+        <h3 class="p-title rv rv-d1">Gravitational-Lens Detection in JWST Imaging</h3>
+        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can rare gravitational lenses be surfaced from massive JWST NIRCam surveys without exhaustive labels?</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val"><strong>Semi-supervised anomaly detection</strong> with a deep CNN (<strong>EfficientNet-B0</strong>) over model-ready image cutouts, with evaluation protocols — AUROC, false-positive rate, sample purity — validated before deployment.</div></div>
+        <div class="p-metrics rv rv-d2">
+          <div class="pm"><div class="v">B0</div><div class="l">EfficientNet backbone</div></div>
+          <div class="pm"><div class="v">AUROC</div><div class="l">Purity-validated</div></div>
+          <div class="pm"><div class="v">FITS</div><div class="l">MAST · astroquery</div></div>
+        </div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Scientific rigor</div><div class="p-val">Diagnosed and closed a <strong>data-leakage</strong> bug through a systematic audit — classes were separable on preprocessing artefacts, not real signal — by rebuilding the pipeline to process every class identically. Built the data prep too: MAST/astroquery archive queries, FITS mosaics, WCS alignment, cutouts.</div></div>
+        <div class="p-tags rv rv-d3"><span>PyTorch</span><span>EfficientNet-B0</span><span>Semi-Supervised</span><span>Anomaly Detection</span><span>FITS · WCS</span></div>
+        <div class="p-links rv rv-d4"><span class="na">◆ Data Science Group · Dr. Ivelina Momcheva</span></div>
+      </div>
+    </article>
+
+    <!-- P2 — Zeiss -->
+    <article class="proj" id="p2" data-cat="cv mle">
+      <div class="proj-visual" data-cursor="view" data-label="Wafer">
+        <span class="pv-num">02</span><span class="pv-tag">Surface Analysis</span>
+        <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <defs><clipPath id="wc"><circle cx="200" cy="150" r="128"/></clipPath></defs>
+          <circle cx="200" cy="150" r="130" stroke="#4A463F" stroke-width="1"/>
+          <circle cx="200" cy="150" r="128" fill="rgba(236,231,221,.02)"/>
+          <g clip-path="url(#wc)" stroke="#2b2925" stroke-width=".6">
+            <line x1="60" y1="70" x2="340" y2="70"/><line x1="60" y1="110" x2="340" y2="110"/>
+            <line x1="60" y1="150" x2="340" y2="150"/><line x1="60" y1="190" x2="340" y2="190"/>
+            <line x1="60" y1="230" x2="340" y2="230"/>
+            <line x1="100" y1="30" x2="100" y2="270"/><line x1="150" y1="30" x2="150" y2="270"/>
+            <line x1="200" y1="30" x2="200" y2="270"/><line x1="250" y1="30" x2="250" y2="270"/>
+            <line x1="300" y1="30" x2="300" y2="270"/>
+          </g>
+          <g clip-path="url(#wc)">
             <rect x="60" y="0" width="280" height="2" fill="#D9502E" opacity=".55" class="scanline"/>
           </g>
           <g stroke="#D9502E">
@@ -479,32 +532,30 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
             <circle cx="160" cy="196" r="4" fill="#D9502E" class="pulse-b"/>
             <circle cx="252" cy="210" r="3" fill="#D9502E" class="pulse-b" style="animation-delay:.6s"/>
           </g>
-          <text x="150" y="70" fill="#7C776D" font-family="IBM Plex Mono" font-size="8">Q1</text>
-          <text x="248" y="70" fill="#7C776D" font-family="IBM Plex Mono" font-size="8">Q2</text>
-          <text x="200" y="308" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">r: 0.011 → 0.598 · POLAR CORRECTION</text>
+          <text x="200" y="304" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">6 FEATURES / POINT → RANDOM FOREST · r 0.011 → 0.598</text>
         </svg>
       </div>
       <div class="proj-body">
-        <div class="p-org rv">Carl Zeiss SMT<span class="dot"></span>Oberkochen<span class="dot"></span>Nov 2025 — Present</div>
-        <h3 class="p-title rv rv-d1">Semiconductor Defect Detection Pipeline</h3>
-        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">How can defect coordinates from EUV-optics inspection be measured accurately enough to serve as a baseline for lithography metrology?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">A modular Python framework: <strong>Hough-circle ROI detection</strong>, polar-coordinate correction of the measurement geometry, and classical + learned defect classification over multiple collectors.</div></div>
+        <div class="p-org rv">Carl Zeiss SMT<span class="dot"></span>Oberkochen<span class="dot"></span>Nov 2025 — Apr 2026</div>
+        <h3 class="p-title rv rv-d1">Semiconductor Defect-Detection Pipeline</h3>
+        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can surface features from microscope imagery predict defects on semiconductor production mirrors reliably enough for engineers to trust?</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">An end-to-end pipeline (built from scratch) ingesting <strong>HDF5</strong> microscope images, extracting <strong>six features per measurement point</strong> and linking them to WLI surface-roughness and defect labels. A per-collector dx/dy grid search fixed a coordinate mismatch, feeding a <strong>Random Forest</strong> classifier.</div></div>
         <div class="p-metrics rv rv-d2">
-          <div class="pm"><div class="v" data-count="94" data-suffix="%">0%</div><div class="l">Classification Acc.</div></div>
-          <div class="pm"><div class="v" data-count="10" data-suffix="×">0×</div><div class="l">Precision Gain</div></div>
-          <div class="pm"><div class="v" data-count="50" data-suffix="%">0%</div><div class="l">Calibration Time Cut</div></div>
-          <div class="pm"><div class="v" data-count="400" data-suffix="+">0</div><div class="l">Points · 4 Collectors</div></div>
+          <div class="pm"><div class="v" data-count="94" data-suffix="%">0%</div><div class="l">Defect Accuracy (RF)</div></div>
+          <div class="pm"><div class="v">.598</div><div class="l">Corr. r (from .011)</div></div>
+          <div class="pm"><div class="v" data-count="400" data-suffix="+">0</div><div class="l">Measurement Points</div></div>
+          <div class="pm"><div class="v" data-count="50" data-suffix="%">0%</div><div class="l">Less Manual Work</div></div>
         </div>
-        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Polar correction lifted correlation from r=0.011 to 0.598 (≈10×). Framework adopted as the team standard and presented to 8+ scientists as a baseline for EUV-lithography inspection.</div></div>
-        <div class="p-tags rv rv-d3"><span>Python</span><span>OpenCV</span><span>scikit-learn</span><span>HDF5</span><span>PyTorch</span></div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Reported honestly that severity prediction did <em>not</em> work — and shipped a modular <strong>Tkinter</strong> tool (plugin architecture, YAML config, logging, pyinstaller executables) so engineers could run analyses themselves.</div></div>
+        <div class="p-tags rv rv-d3"><span>Python</span><span>Random Forest</span><span>OpenCV</span><span>HDF5</span><span>Tkinter</span></div>
         <div class="p-links rv rv-d4"><span class="na">◆ Proprietary — Confidential</span></div>
       </div>
     </article>
 
-    <!-- P2 -->
-    <article class="proj" id="p2" data-cat="cv mle">
+    <!-- P3 — Matworks -->
+    <article class="proj" id="p3" data-cat="cv mle">
       <div class="proj-visual" data-cursor="view" data-label="Detect">
-        <span class="pv-num">02</span><span class="pv-tag">Bondpad Detection</span>
+        <span class="pv-num">03</span><span class="pv-tag">Bondpad Detection</span>
         <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
           <rect x="50" y="40" width="300" height="240" stroke="#4A463F" stroke-width="1"/>
           <g stroke="#2b2925" stroke-width=".6">
@@ -525,29 +576,30 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
           <text x="240" y="164" fill="#D9502E" font-family="IBM Plex Mono" font-size="9">0.94</text>
           <rect x="50" y="296" width="300" height="2" fill="#2b2925"/>
           <rect x="50" y="296" width="120" height="2" fill="#D9502E" class="scanbar"/>
-          <text x="200" y="312" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">2592 × 2592 · ONNX INFERENCE</text>
+          <text x="200" y="312" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">YOLOv9c → ONNX · LIVE HARDWARE</text>
         </svg>
       </div>
       <div class="proj-body">
         <div class="p-org rv">Matworks GmbH<span class="dot"></span>Aalen<span class="dot"></span>May — Oct 2025</div>
-        <h3 class="p-title rv rv-d1">YOLOv9c Bondpad Detection System</h3>
-        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can manual integrated-circuit inspection under a microscope be replaced by an object detector without disrupting the existing lab workflow?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">A full <strong>YOLOv9c → ONNX</strong> pipeline (2592×2592 input, letterbox + coordinate remap) wrapped in a silent CLI, integrated directly into the <strong>ZEN microscope</strong> workflow.</div></div>
+        <h3 class="p-title rv rv-d1">YOLOv9c Detection &amp; Hyperspectral ML</h3>
+        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can microscope IC inspection and material quality checks be automated directly on live industrial hardware?</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">Trained <strong>YOLOv9c</strong> on labelled microscope images, exported to <strong>ONNX</strong> and integrated with live hardware for bondpad detection. Also built a <strong>50+ band hyperspectral</strong> pipeline fusing spectral data with metadata, and a PCA/texture <strong>drift-detection</strong> framework deployed as standard monitoring.</div></div>
         <div class="p-metrics rv rv-d2">
-          <div class="pm"><div class="v" data-count="70" data-suffix="%">0%</div><div class="l">Manual Time Saved</div></div>
-          <div class="pm"><div class="v" data-count="1000" data-suffix="+">0</div><div class="l">Components</div></div>
-          <div class="pm"><div class="v">CLI</div><div class="l">Production Deploy</div></div>
+          <div class="pm"><div class="v" data-count="70" data-suffix="%">0%</div><div class="l">Less Manual Analysis</div></div>
+          <div class="pm"><div class="v" data-count="1000" data-suffix="+">0</div><div class="l">Inspections</div></div>
+          <div class="pm"><div class="v" data-count="50" data-suffix="+">0</div><div class="l">Spectral Bands</div></div>
+          <div class="pm"><div class="v" data-count="3" data-suffix="+">0</div><div class="l">Industrial Clients</div></div>
         </div>
-        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Owned the full lifecycle — prototype → CLI → microscope deployment — reducing manual IC analysis by ~70% across 1,000+ components. Now a standard inspection tool.</div></div>
-        <div class="p-tags rv rv-d3"><span>YOLOv9c</span><span>ONNX</span><span>Python</span><span>OpenCV</span><span>ZEN</span></div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Bondpad detection became the standard method across 1,000+ inspections; drift monitoring shipped across client deployments. Also built customer-facing quality-inspection frontend modules.</div></div>
+        <div class="p-tags rv rv-d3"><span>YOLOv9c</span><span>ONNX</span><span>Hyperspectral</span><span>PCA · Drift</span><span>Python</span></div>
         <div class="p-links rv rv-d4"><span class="na">◆ Proprietary — Confidential</span></div>
       </div>
     </article>
 
-    <!-- P3 -->
-    <article class="proj" id="p3" data-cat="research">
+    <!-- P4 — KAN -->
+    <article class="proj" id="p4" data-cat="research">
       <div class="proj-visual" data-cursor="view" data-label="KAN">
-        <span class="pv-num">03</span><span class="pv-tag">KAN Architecture</span>
+        <span class="pv-num">04</span><span class="pv-tag">KAN Architecture</span>
         <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
           <g stroke="#3a3731" stroke-width=".8">
             <path d="M90,90 C160,70 220,120 300,110"/><path d="M90,90 C150,110 210,160 300,160"/>
@@ -570,57 +622,96 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         </svg>
       </div>
       <div class="proj-body">
-        <div class="p-org rv">Hochschule Aalen<span class="dot"></span>Prof. Dr. Csiszár<span class="dot"></span>May — Sep 2025</div>
-        <h3 class="p-title rv rv-d1">KAN for Cancer Gene Prediction</h3>
-        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can Kolmogorov–Arnold Networks recover interpretable symbolic relationships between gene expression and synthetic-lethality targets for personalized cancer treatment?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">Compared <strong>3 KAN variants</strong> (B-spline, ChebyKAN, FasterKAN) across <strong>7 SL targets</strong> with 5-fold cross-validation and augmentation, then extracted closed-form expressions via <strong>auto_symbolic()</strong>.</div></div>
+        <div class="p-org rv">Hochschule Aalen<span class="dot"></span>Prof. Dr. Orsolya Csiszar<span class="dot"></span>May — Sep 2025</div>
+        <h3 class="p-title rv rv-d1">KAN &amp; Explainable AI for Gene Expression</h3>
+        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can Kolmogorov–Arnold Networks model gene-expression synthetic-lethality targets while staying interpretable?</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">Implemented and compared <strong>three KAN variants</strong> (B-spline KAN, ChebyKAN, FasterKAN) in PyTorch on the <strong>SLKB</strong> dataset (10,000+ interactions, 7 targets) with 5-fold cross-validation and Wilcoxon tests; built XAI tooling — activation visualisation, symbolic-formula extraction, correlation/VIF/PCA diagnostics.</div></div>
         <div class="p-metrics rv rv-d2">
           <div class="pm"><div class="v" data-count="3">0</div><div class="l">KAN Variants</div></div>
           <div class="pm"><div class="v" data-count="7">0</div><div class="l">SL Targets</div></div>
-          <div class="pm"><div class="v">p<span class="u">&lt;.0001</span></div><div class="l">Wilcoxon Sig.</div></div>
-          <div class="pm"><div class="v">5–31</div><div class="l">Formula Complexity</div></div>
+          <div class="pm"><div class="v">10K<span class="u">+</span></div><div class="l">Interactions</div></div>
+          <div class="pm"><div class="v">5-fold</div><div class="l">Cross-Validation</div></div>
         </div>
-        <div class="p-field rv rv-d3"><div class="p-lbl">Result</div><div class="p-val">Full models significantly outperformed reduced ones on every target (Wilcoxon p&lt;0.0001). Part of an international collaboration (Spain); work submitted to <strong>EEML 2026</strong>.</div></div>
-        <div class="p-tags rv rv-d3"><span>PyTorch</span><span>KAN</span><span>ChebyKAN</span><span>FasterKAN</span><span>Symbolic Regression</span></div>
-        <div class="p-links rv rv-d4"><span class="na">◆ Submitted — EEML 2026</span></div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">The XAI tooling is still used by the research group; collaborated with 5+ researchers across three countries. Also developed ML models for the BMBF-funded <strong>Smart-LIGHT</strong> project (SmartPro network) on quality assessment of hybrid lightweight components.</div></div>
+        <div class="p-tags rv rv-d3"><span>PyTorch</span><span>KAN</span><span>ChebyKAN</span><span>FasterKAN</span><span>Symbolic Regression</span><span>XAI</span></div>
+        <div class="p-links rv rv-d4"><span class="na">◆ Research — collaboration across 3 countries</span></div>
       </div>
     </article>
 
-    <!-- P4 -->
-    <article class="proj" id="p4" data-cat="mle research">
-      <div class="proj-visual" data-cursor="view" data-label="RAG">
-        <span class="pv-num">04</span><span class="pv-tag">RAG Forecaster</span>
+    <!-- P5 — Multimodal RAG -->
+    <article class="proj" id="p5" data-cat="llm mle">
+      <div class="proj-visual" data-cursor="view" data-label="Agent">
+        <span class="pv-num">05</span><span class="pv-tag">Tool-Calling Agent</span>
         <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <g stroke="#4A463F" stroke-width="1" font-family="IBM Plex Mono" font-size="10">
-            <rect x="130" y="26" width="140" height="34"/><text x="200" y="47" fill="#B4AFA4" text-anchor="middle" stroke="none">natural-language query</text>
-            <rect x="110" y="92" width="180" height="34"/><text x="200" y="113" fill="#B4AFA4" text-anchor="middle" stroke="none">RAG retrieval · context</text>
-          </g>
-          <rect x="90" y="150" width="220" height="44" stroke="#D9502E" stroke-width="1.4" class="pulse-a"/>
-          <text x="200" y="177" fill="#D9502E" font-family="Fraunces" font-size="15" text-anchor="middle">LLM reasoning</text>
-          <g stroke="#4A463F" stroke-width="1" font-family="IBM Plex Mono" font-size="10">
-            <rect x="110" y="222" width="180" height="34"/><text x="200" y="243" fill="#B4AFA4" text-anchor="middle" stroke="none">forecast + explanation</text>
+          <g stroke="#4A463F" stroke-width="1" font-family="IBM Plex Mono" font-size="9">
+            <rect x="28" y="62" width="78" height="26"/><text x="67" y="79" fill="#B4AFA4" text-anchor="middle" stroke="none">text</text>
+            <rect x="28" y="147" width="78" height="26"/><text x="67" y="164" fill="#B4AFA4" text-anchor="middle" stroke="none">image</text>
+            <rect x="28" y="232" width="78" height="26"/><text x="67" y="249" fill="#B4AFA4" text-anchor="middle" stroke="none">audio</text>
           </g>
           <g stroke="#3a3731" stroke-width="1">
-            <line x1="200" y1="60" x2="200" y2="92"/><line x1="200" y1="126" x2="200" y2="150"/><line x1="200" y1="194" x2="200" y2="222"/>
+            <path d="M106,75 C150,75 150,145 172,148"/><path d="M106,160 L172,160"/><path d="M106,245 C150,245 150,175 172,172"/>
           </g>
-          <circle r="3" fill="#D9502E" class="flow"><animateMotion dur="2.4s" repeatCount="indefinite" path="M200,60 L200,256"/></circle>
-          <text x="200" y="300" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">sktime API · LANGCHAIN · HUGGING FACE</text>
+          <rect x="172" y="118" width="92" height="84" stroke="#D9502E" stroke-width="1.4" class="pulse-a"/>
+          <text x="218" y="152" fill="#D9502E" font-family="Fraunces" font-size="15" text-anchor="middle">agent</text>
+          <text x="218" y="174" fill="#D9502E" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">tool-calling</text>
+          <rect x="300" y="118" width="72" height="64" stroke="#4A463F" stroke-width="1"/>
+          <g fill="rgba(236,231,221,.30)">
+            <circle cx="316" cy="134" r="1.6"/><circle cx="332" cy="134" r="1.6"/><circle cx="348" cy="134" r="1.6"/><circle cx="364" cy="134" r="1.6"/>
+            <circle cx="316" cy="150" r="1.6"/><circle cx="332" cy="150" r="1.6"/><circle cx="348" cy="150" r="1.6"/><circle cx="364" cy="150" r="1.6"/>
+            <circle cx="316" cy="166" r="1.6"/><circle cx="332" cy="166" r="1.6"/><circle cx="348" cy="166" r="1.6"/><circle cx="364" cy="166" r="1.6"/>
+          </g>
+          <text x="336" y="196" fill="#7C776D" font-family="IBM Plex Mono" font-size="7" text-anchor="middle">FAISS</text>
+          <g stroke="#D9502E" stroke-width="1"><path d="M264,146 L300,138"/><path d="M300,158 L264,168"/></g>
+          <circle r="3" fill="#D9502E" class="flow"><animateMotion dur="2.6s" repeatCount="indefinite" path="M264,146 L300,138"/></circle>
+          <text x="200" y="300" fill="#7C776D" font-family="IBM Plex Mono" font-size="8" text-anchor="middle">QWEN-VL · WHISPER · FAISS RETRIEVAL</text>
         </svg>
       </div>
       <div class="proj-body">
-        <div class="p-org rv">Google Summer of Code 2026<span class="dot"></span>sktime / GC.OS<span class="dot"></span>Feb 2026 — Present</div>
-        <h3 class="p-title rv rv-d1">RAGForecaster — LLM Forecasting Agent</h3>
-        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can retrieval-augmented LLMs make statistical time-series forecasting conversational — selecting, configuring and explaining models from plain language?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">Designed <strong>RAGForecaster</strong>, combining RAG with statistical forecasting behind the <strong>sktime</strong> estimator API: natural-language query → model selection → forecast → explanation.</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Model / Stack</div><div class="p-val">LangChain orchestration, Hugging Face models, vector retrieval, production API patterns.</div></div>
-        <div class="p-field rv rv-d3"><div class="p-lbl">Contribution</div><div class="p-val">Open-source contributions: a pull request to <strong>sktime (#9721)</strong> and a LangChain chatbot (<strong>C2SI PR #164</strong>) — end-to-end LLM application with real-world API design.</div></div>
-        <div class="p-tags rv rv-d3"><span>LangChain</span><span>RAG</span><span>LLMs</span><span>sktime</span><span>Hugging Face</span></div>
+        <div class="p-org rv">Independent Project<span class="dot"></span>2026<span class="dot"></span>In progress</div>
+        <h3 class="p-title rv rv-d1">Multimodal RAG Assistant with a Tool-Calling Agent</h3>
+        <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can a single agent answer text, image and audio queries reliably by calling the right tools and retrieving the right context?</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val">A <strong>tool-calling agent</strong> over a vision-language model (<strong>Qwen-VL</strong>) and an audio model (<strong>Whisper</strong>) with <strong>FAISS</strong> retrieval, plus an evaluation setup measuring retrieval quality and tool-call success.</div></div>
+        <div class="p-metrics rv rv-d2">
+          <div class="pm"><div class="v">Qwen-VL</div><div class="l">Vision-Language</div></div>
+          <div class="pm"><div class="v">Whisper</div><div class="l">Audio</div></div>
+          <div class="pm"><div class="v">FAISS</div><div class="l">Retrieval</div></div>
+        </div>
+        <div class="p-field rv rv-d3"><div class="p-lbl">Part of a body of LLM / agentic work</div><div class="p-val">Including a <strong>LangChain multi-agent RAG</strong> system with failure-mode analysis, and a <strong>merged open-source</strong> contribution to <strong>sktime</strong> — an interface for LLM-based time-series forecasting agents.</div></div>
+        <div class="p-tags rv rv-d3"><span>LLMs</span><span>RAG</span><span>FAISS</span><span>LangChain</span><span>Qwen-VL</span><span>Whisper</span><span>Tool Calling</span></div>
         <div class="p-links rv rv-d4">
-          <a href="https://github.com/sktime/sktime/pull/9721" target="_blank" rel="noopener" data-cursor="link">sktime PR #9721 →</a>
-          <a href="https://github.com/sktime/sktime" target="_blank" rel="noopener" data-cursor="link">sktime →</a>
+          <a href="https://github.com/sktime/sktime" target="_blank" rel="noopener" data-cursor="link">sktime (merged) →</a>
+          <a href="https://github.com/khushbooshaurya5" target="_blank" rel="noopener" data-cursor="link">GitHub →</a>
         </div>
       </div>
     </article>
+
+    <!-- FURTHER PROJECTS -->
+    <div class="further">
+      <span class="eyebrow rv">Also</span>
+      <h3 class="sec-title rv rv-d1" style="font-size:clamp(1.5rem,3.4vw,2.4rem);margin:18px 0 30px">Further projects.</h3>
+      <div class="work-index">
+        <div class="wi-row rv">
+          <span class="wi-num">P/01</span>
+          <span class="wi-name">Multi-Agent LLM System</span>
+          <span class="wi-cat">LangChain · RAG · Tool Use</span>
+        </div>
+        <div class="wi-row rv">
+          <span class="wi-num">P/02</span>
+          <span class="wi-name">Foundation-Model Forecasting Agents</span>
+          <span class="wi-cat">sktime · Open Source (merged)</span>
+        </div>
+        <div class="wi-row rv">
+          <span class="wi-num">P/03</span>
+          <span class="wi-name">ANN Internals — CIFAR-10</span>
+          <span class="wi-cat">Activations · Pruning · Seminar</span>
+        </div>
+        <div class="wi-row rv">
+          <span class="wi-num">P/04</span>
+          <span class="wi-name">Autonomous-Driving Simulation</span>
+          <span class="wi-cat">CARLA · Unreal Engine · Perception</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -635,55 +726,56 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <span class="sec-idx rv rv-d2">§ 02 — Directions</span>
     </div>
     <p class="res-lead rv">My work sits between <em>understanding</em> models and <em>shipping</em> them — probing how
-      neural networks represent information, and turning that understanding into systems that hold up in industrial settings.</p>
+      neural networks represent information, and turning that understanding into systems that hold up in
+      research pipelines and on the industrial line.</p>
     <div class="res-grid">
       <div class="res-cell rv" data-cursor="link">
         <div class="rc-idx">R/01</div>
-        <div class="rc-title">Neural Network Interpretability</div>
-        <div class="rc-desc">Probing ANN internals — what individual neurons and layers respond to, and how activations organise inside a trained network.</div>
-        <div class="rc-kw">activation analysis · feature attribution</div>
+        <div class="rc-title">Neural Network Interpretability &amp; XAI</div>
+        <div class="rc-desc">Activation visualisation and symbolic-formula extraction — making trained models explain themselves rather than staying black boxes.</div>
+        <div class="rc-kw">activations · symbolic extraction</div>
       </div>
       <div class="res-cell rv rv-d1" data-cursor="link">
         <div class="rc-idx">R/02</div>
-        <div class="rc-title">Model Analysis</div>
-        <div class="rc-desc">Empirical study of network behaviour on benchmark vision datasets such as CIFAR-10 — how architecture and training choices shape learned representations.</div>
-        <div class="rc-kw">benchmarks · representation study</div>
+        <div class="rc-title">Model Behaviour Analysis</div>
+        <div class="rc-desc">ANN internals on CIFAR-10 — neuron activations, pruning and representation analysis with reproducible experimental evaluation.</div>
+        <div class="rc-kw">CIFAR-10 · pruning · representations</div>
       </div>
       <div class="res-cell rv" data-cursor="link">
         <div class="rc-idx">R/03</div>
         <div class="rc-title">Neural Architectures</div>
-        <div class="rc-desc">Kolmogorov–Arnold Networks and learnable spline activations as alternatives to fixed-activation MLPs, evaluated on real scientific data.</div>
-        <div class="rc-kw">KAN · ChebyKAN · FasterKAN</div>
+        <div class="rc-desc">Kolmogorov–Arnold Networks (B-spline, Cheby, Faster) and transformers/attention implemented from scratch — beyond fixed-activation MLPs.</div>
+        <div class="rc-kw">KAN · attention from scratch</div>
       </div>
       <div class="res-cell rv rv-d1" data-cursor="link">
         <div class="rc-idx">R/04</div>
-        <div class="rc-title">Symbolic Regression</div>
-        <div class="rc-desc">Recovering closed-form, interpretable expressions from trained models — bridging black-box accuracy and human-readable science.</div>
-        <div class="rc-kw">auto_symbolic · interpretable ML</div>
+        <div class="rc-title">Anomaly &amp; Semi-Supervised Learning</div>
+        <div class="rc-desc">Surfacing rare signal without exhaustive labels — gravitational-lens detection in JWST imaging, and drift detection in production.</div>
+        <div class="rc-kw">anomaly detection · drift</div>
       </div>
       <div class="res-cell rv" data-cursor="link">
         <div class="rc-idx">R/05</div>
-        <div class="rc-title">Efficient ML</div>
-        <div class="rc-desc">Pruning and compression experiments — how much of a network can be removed before accuracy degrades, and what that reveals about redundancy.</div>
-        <div class="rc-kw">pruning · compression</div>
+        <div class="rc-title">Symbolic Regression &amp; Diagnostics</div>
+        <div class="rc-desc">Recovering interpretable expressions from trained models, backed by correlation / VIF / PCA statistical diagnostics.</div>
+        <div class="rc-kw">symbolic regression · VIF · PCA</div>
       </div>
       <div class="res-cell rv rv-d1" data-cursor="link">
         <div class="rc-idx">R/06</div>
         <div class="rc-title">Computer Vision</div>
-        <div class="rc-desc">Detection, segmentation and image analysis — from research prototypes to metrology-grade inspection pipelines.</div>
-        <div class="rc-kw">detection · segmentation</div>
+        <div class="rc-desc">Detection, segmentation and hyperspectral imaging — from research prototypes to metrology-grade industrial inspection.</div>
+        <div class="rc-kw">detection · hyperspectral</div>
       </div>
       <div class="res-cell rv" data-cursor="link">
         <div class="rc-idx">R/07</div>
         <div class="rc-title">Industrial ML</div>
-        <div class="rc-desc">Deploying machine learning inside manufacturing and metrology — where robustness, calibration and workflow integration matter as much as accuracy.</div>
-        <div class="rc-kw">deployment · robustness</div>
+        <div class="rc-desc">ML on the manufacturing line — Zeiss &amp; Matworks — where calibration, honest evaluation and workflow integration matter as much as accuracy.</div>
+        <div class="rc-kw">deployment · evaluation · robustness</div>
       </div>
       <div class="res-cell rv rv-d1" data-cursor="link">
         <div class="rc-idx">R/08</div>
-        <div class="rc-title">LLM Systems</div>
-        <div class="rc-desc">Retrieval-augmented generation and agentic pipelines that make quantitative models controllable through natural language.</div>
-        <div class="rc-kw">RAG · agents · sktime</div>
+        <div class="rc-title">LLM &amp; Agentic Systems</div>
+        <div class="rc-desc">Retrieval-augmented generation, tool calling and multi-agent orchestration across text, vision and audio — with failure-mode analysis.</div>
+        <div class="rc-kw">RAG · agents · multimodal</div>
       </div>
     </div>
 
@@ -693,49 +785,73 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <h3 class="sec-title rv rv-d1" style="font-size:clamp(1.6rem,3.6vw,2.6rem);margin:18px 0 44px">The working stack.</h3>
       <div class="tb-grid">
         <div class="tb-group rv">
-          <div class="tb-h"><span>Machine Learning</span><span class="tb-n">/ 01</span></div>
+          <div class="tb-h"><span>Machine &amp; Deep Learning</span><span class="tb-n">/ 01</span></div>
           <div class="tb-items">
-            <span class="chip" data-ctx="Core framework — KAN, YOLO, research">PyTorch</span>
+            <span class="chip" data-ctx="Primary framework across research & industry">PyTorch</span>
+            <span class="chip" data-ctx="Also used for CV models">TensorFlow</span>
             <span class="chip" data-ctx="Classical ML & pipelines">scikit-learn</span>
-            <span class="chip" data-ctx="Cancer-gene research architecture">KAN</span>
-            <span class="chip" data-ctx="Attention-based models">Transformers</span>
-            <span class="chip" data-ctx="Gradient boosting">LightGBM</span>
-            <span class="chip" data-ctx="Ensemble baselines">Random Forest</span>
-            <span class="chip" data-ctx="Deployment / inference">ONNX</span>
+            <span class="chip" data-ctx="EfficientNet, YOLO">CNNs</span>
+            <span class="chip" data-ctx="Implemented from scratch">Transformers</span>
+            <span class="chip" data-ctx="Gene-expression research">KAN</span>
+            <span class="chip" data-ctx="Defect classification @ Zeiss">Random Forests</span>
           </div>
         </div>
         <div class="tb-group rv rv-d1">
           <div class="tb-h"><span>Computer Vision</span><span class="tb-n">/ 02</span></div>
           <div class="tb-items">
-            <span class="chip" data-ctx="Image processing & ROI detection">OpenCV</span>
+            <span class="chip" data-ctx="Image processing & features">OpenCV</span>
             <span class="chip" data-ctx="Bondpad detection @ Matworks">YOLOv9c</span>
-            <span class="chip" data-ctx="Image segmentation">Segmentation</span>
-            <span class="chip" data-ctx="ROI localisation on wafers">Hough Transform</span>
-            <span class="chip" data-ctx="Large scientific image storage">HDF5</span>
-            <span class="chip" data-ctx="Feature extraction">Image Processing</span>
+            <span class="chip" data-ctx="Deployment / inference">ONNX</span>
+            <span class="chip" data-ctx="50+ band imaging">Hyperspectral</span>
+            <span class="chip" data-ctx="Segmentation & classification">Segmentation</span>
+            <span class="chip" data-ctx="Scientific image data">HDF5 · FITS</span>
           </div>
         </div>
         <div class="tb-group rv">
-          <div class="tb-h"><span>Programming</span><span class="tb-n">/ 03</span></div>
+          <div class="tb-h"><span>LLMs · RAG · Agents</span><span class="tb-n">/ 03</span></div>
           <div class="tb-items">
-            <span class="chip" data-ctx="Primary language — expert">Python</span>
-            <span class="chip" data-ctx="Data querying">SQL</span>
-            <span class="chip" data-ctx="Systems / performance">C++</span>
-            <span class="chip" data-ctx="OOP & tooling">Java</span>
-            <span class="chip" data-ctx="Front-end basics">TypeScript</span>
-            <span class="chip" data-ctx="UI basics">React</span>
+            <span class="chip" data-ctx="Large language models">LLMs</span>
+            <span class="chip" data-ctx="Retrieval-augmented generation">RAG</span>
+            <span class="chip" data-ctx="Vector retrieval">FAISS</span>
+            <span class="chip" data-ctx="Orchestration & tool use">LangChain</span>
+            <span class="chip" data-ctx="Multi-agent systems">Tool Calling</span>
+            <span class="chip" data-ctx="Vision-language model">Qwen-VL</span>
+            <span class="chip" data-ctx="Audio model">Whisper</span>
           </div>
         </div>
         <div class="tb-group rv rv-d1">
-          <div class="tb-h"><span>Engineering &amp; LLMs</span><span class="tb-n">/ 04</span></div>
+          <div class="tb-h"><span>Data · Evaluation · MLOps</span><span class="tb-n">/ 04</span></div>
           <div class="tb-items">
-            <span class="chip" data-ctx="Version control">Git</span>
-            <span class="chip" data-ctx="Containerisation">Docker</span>
-            <span class="chip" data-ctx="CLI packaging">PyInstaller</span>
-            <span class="chip" data-ctx="Service integration">REST APIs</span>
-            <span class="chip" data-ctx="LLM orchestration">LangChain</span>
-            <span class="chip" data-ctx="Retrieval-augmented generation">RAG</span>
-            <span class="chip" data-ctx="Model hub">Hugging Face</span>
+            <span class="chip" data-ctx="Curation, filtering, augmentation">Dataset Curation</span>
+            <span class="chip" data-ctx="Data pipelines">ETL</span>
+            <span class="chip" data-ctx="Caught a real leak @ MPIA">Leakage Audits</span>
+            <span class="chip" data-ctx="Experiment design">Ablations</span>
+            <span class="chip" data-ctx="Benchmarking metrics">AUROC · FPR</span>
+            <span class="chip" data-ctx="Statistical testing">Wilcoxon · PCA · VIF</span>
+            <span class="chip" data-ctx="Production monitoring">Drift Monitoring</span>
+          </div>
+        </div>
+        <div class="tb-group rv">
+          <div class="tb-h"><span>Programming</span><span class="tb-n">/ 05</span></div>
+          <div class="tb-items">
+            <span class="chip" data-ctx="Advanced — primary language">Python</span>
+            <span class="chip" data-ctx="Data querying @ HighRadius">SQL</span>
+            <span class="chip">Java</span>
+            <span class="chip" data-ctx="Systems / performance">C / C++</span>
+            <span class="chip">NumPy</span>
+            <span class="chip">pandas</span>
+            <span class="chip" data-ctx="Desktop tooling">Tkinter</span>
+          </div>
+        </div>
+        <div class="tb-group rv rv-d1">
+          <div class="tb-h"><span>Engineering</span><span class="tb-n">/ 06</span></div>
+          <div class="tb-items">
+            <span class="chip" data-ctx="Version control">Git · GitHub</span>
+            <span class="chip">Linux</span>
+            <span class="chip" data-ctx="Containerisation (basics)">Docker</span>
+            <span class="chip" data-ctx="Config">YAML</span>
+            <span class="chip" data-ctx="CLI executables">pyinstaller</span>
+            <span class="chip" data-ctx="Certified">CCNA</span>
           </div>
         </div>
       </div>
@@ -756,39 +872,51 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     <div class="tl" id="timeline">
       <div class="tl-prog" id="tlProg" aria-hidden="true"></div>
       <div class="tl-item rv">
-        <div class="tl-top"><div class="tl-org">Carl Zeiss SMT</div><div class="tl-period">Nov 2025 — Present</div></div>
-        <div class="tl-role">Machine Learning · Semiconductor Metrology — Oberkochen</div>
-        <div class="tl-impact">Built a modular defect-detection framework for EUV-optics inspection; polar-coordinate correction improved measurement precision ~10× and it became the team&rsquo;s baseline tool.</div>
-        <div class="tl-tags"><span>Computer Vision</span><span>OpenCV</span><span>scikit-learn</span><span>HDF5</span></div>
+        <div class="tl-top"><div class="tl-org">Max Planck Institute for Astronomy</div><div class="tl-period">Jun — Aug 2026</div></div>
+        <div class="tl-role">Student Research Assistant · Data Science Group · Heidelberg</div>
+        <div class="tl-impact">Built an ML pipeline detecting gravitational lenses in JWST NIRCam imaging via semi-supervised anomaly detection (EfficientNet-B0); diagnosed and closed a data-leakage bug through a systematic audit.</div>
+        <div class="tl-tags"><span>EfficientNet</span><span>Semi-Supervised</span><span>FITS · WCS</span><span>AUROC</span></div>
       </div>
       <div class="tl-item rv">
-        <div class="tl-top"><div class="tl-org">Google Summer of Code 2026</div><div class="tl-period">Feb 2026 — Present</div></div>
-        <div class="tl-role">Open-Source ML Contributor · sktime / GC.OS</div>
-        <div class="tl-impact">Designing RAGForecaster — a retrieval-augmented LLM forecasting agent behind the sktime API — with merged-track contributions to sktime and a LangChain chatbot.</div>
-        <div class="tl-tags"><span>LangChain</span><span>RAG</span><span>LLMs</span><span>sktime</span></div>
+        <div class="tl-top"><div class="tl-org">Carl Zeiss SMT GmbH</div><div class="tl-period">Nov 2025 — Apr 2026</div></div>
+        <div class="tl-role">Algorithm &amp; Machine Learning Intern · Oberkochen</div>
+        <div class="tl-impact">Built an HDF5 feature-extraction + Random Forest defect pipeline for production mirrors (r 0.011→0.598, 94% accuracy, 400+ points) and a modular Tkinter tool engineers use themselves.</div>
+        <div class="tl-tags"><span>Random Forest</span><span>OpenCV</span><span>HDF5</span><span>Tkinter</span></div>
       </div>
       <div class="tl-item rv">
         <div class="tl-top"><div class="tl-org">Matworks GmbH</div><div class="tl-period">May — Oct 2025</div></div>
-        <div class="tl-role">Computer Vision Engineering — Aalen</div>
-        <div class="tl-impact">Owned a YOLOv9c → ONNX bondpad-detection system end-to-end, integrated into the ZEN microscope workflow — cutting manual IC analysis by ~70% across 1,000+ components.</div>
-        <div class="tl-tags"><span>YOLOv9c</span><span>ONNX</span><span>Python</span><span>CLI Deploy</span></div>
+        <div class="tl-role">Working Student, Machine Learning · Aalen</div>
+        <div class="tl-impact">Shipped a YOLOv9c → ONNX bondpad detector on live hardware (~70% less manual work, 1,000+ inspections), a 50+ band hyperspectral pipeline, and a PCA/texture drift-detection framework.</div>
+        <div class="tl-tags"><span>YOLOv9c</span><span>ONNX</span><span>Hyperspectral</span><span>Drift Detection</span></div>
       </div>
       <div class="tl-item rv">
         <div class="tl-top"><div class="tl-org">Hochschule Aalen</div><div class="tl-period">May — Sep 2025</div></div>
-        <div class="tl-role">ML Research · Prof. Dr. Csiszár</div>
-        <div class="tl-impact">Studied Kolmogorov–Arnold Networks for cancer-gene prediction across 3 variants and 7 targets, extracting symbolic formulas; work submitted to EEML 2026.</div>
-        <div class="tl-tags"><span>PyTorch</span><span>KAN</span><span>Symbolic Regression</span></div>
+        <div class="tl-role">Student Research Assistant (HiWi) · Prof. Dr. Orsolya Csiszar</div>
+        <div class="tl-impact">Compared three KAN variants on the SLKB gene-expression dataset (10,000+ interactions, 7 targets) and built XAI tooling still used by the group; also modelled for the BMBF Smart-LIGHT project.</div>
+        <div class="tl-tags"><span>PyTorch</span><span>KAN</span><span>XAI</span><span>Symbolic Regression</span></div>
       </div>
       <div class="tl-item rv">
-        <div class="tl-top"><div class="tl-org">Aalen University</div><div class="tl-period">2025 — Present</div></div>
+        <div class="tl-top"><div class="tl-org">Formula Student Team, Hochschule Aalen</div><div class="tl-period">Apr — Jul 2025</div></div>
+        <div class="tl-role">Autonomous Driving · Extra-curricular</div>
+        <div class="tl-impact">Autonomous-driving simulation for driverless development in Unreal Engine 4 with CARLA and camera-based perception.</div>
+        <div class="tl-tags"><span>CARLA</span><span>Unreal Engine 4</span><span>Perception</span></div>
+      </div>
+      <div class="tl-item rv">
+        <div class="tl-top"><div class="tl-org">HighRadius Technologies</div><div class="tl-period">Jan 2021 — Jul 2024</div></div>
+        <div class="tl-role">Fintech SaaS for Fortune 2000 · Promoted across 4 roles · India</div>
+        <div class="tl-impact">Led a team delivering Python cloud products for global clients; introduced automation cutting manual workflows ~30%; ran user-acceptance testing and training (108% target completion). Earlier: built and deployed an AI-enabled fintech B2B cloud app full-stack.</div>
+        <div class="tl-tags"><span>Python</span><span>SQL</span><span>Cloud SaaS</span><span>Full-Stack</span></div>
+      </div>
+      <div class="tl-item rv">
+        <div class="tl-top"><div class="tl-org">Hochschule Aalen</div><div class="tl-period">Mar 2025 — 2027</div></div>
         <div class="tl-role">M.Sc. Machine Learning &amp; Data Analytics</div>
-        <div class="tl-impact">Graduate study bridging computer-science foundations with applied ML research and industrial practice.</div>
-        <div class="tl-tags"><span>Deep Learning</span><span>Data Analytics</span><span>Research</span></div>
+        <div class="tl-impact">Deep learning, computer vision and data analytics; attention from scratch; a seminar on foundation models for time series.</div>
+        <div class="tl-tags"><span>Deep Learning</span><span>Computer Vision</span><span>Data Analytics</span></div>
       </div>
       <div class="tl-item rv">
         <div class="tl-top"><div class="tl-org">KIIT University</div><div class="tl-period">2018 — 2022</div></div>
-        <div class="tl-role">B.Tech Computer Science &amp; Engineering — India</div>
-        <div class="tl-impact">Computer-science foundations — algorithms, systems and programming — the base the rest of the trajectory builds on.</div>
+        <div class="tl-role">B.Tech Computer Science &amp; Engineering · Top of class · India</div>
+        <div class="tl-impact">Final grade 1.8 (German scale). Algorithms, data structures, operating systems and software engineering — the foundation the rest builds on.</div>
         <div class="tl-tags"><span>CS Foundations</span><span>Algorithms</span></div>
       </div>
     </div>
@@ -801,33 +929,38 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     <div class="sec-head">
       <div>
         <span class="eyebrow rv">About</span>
-        <h2 class="sec-title rv rv-d1" style="margin-top:20px">From <em>computer science</em> to <em>industrial ML.</em></h2>
+        <h2 class="sec-title rv rv-d1" style="margin-top:20px">From <em>software</em> to <em>industrial &amp; research ML.</em></h2>
       </div>
       <span class="sec-idx rv rv-d2">§ 04 — Profile</span>
     </div>
     <div class="about-grid">
       <div class="about-lead-col">
-        <p class="about-lead rv">I&rsquo;m an ML engineer and researcher who moves fluently between the <em>whiteboard</em> and the <em>lab floor</em> — as comfortable dissecting a network&rsquo;s internals as shipping a detector into a microscope.</p>
+        <p class="about-lead rv">I&rsquo;m a machine-learning engineer and researcher who moves fluently between the <em>whiteboard</em> and the <em>lab floor</em> — as comfortable auditing a pipeline for data leakage as shipping a detector onto live hardware.</p>
         <div class="traj rv rv-d1">
-          <div class="traj-step"><div class="ts-stage">01</div><div><div class="ts-name">Computer Science</div><div class="ts-note">B.Tech CSE, KIIT — algorithms, systems, programming.</div></div></div>
-          <div class="traj-step"><div class="ts-stage">02</div><div><div class="ts-name">Machine Learning</div><div class="ts-note">M.Sc. ML &amp; Data Analytics, Aalen — deep learning & applied ML.</div></div></div>
-          <div class="traj-step"><div class="ts-stage">03</div><div><div class="ts-name">Research</div><div class="ts-note">KAN & symbolic regression; interpretability & model analysis.</div></div></div>
-          <div class="traj-step"><div class="ts-stage">04</div><div><div class="ts-name">Industrial ML</div><div class="ts-note">Zeiss & Matworks — computer vision in real production settings.</div></div></div>
+          <div class="traj-step"><div class="ts-stage">01</div><div><div class="ts-name">Computer Science</div><div class="ts-note">B.Tech CSE, KIIT — top of class; algorithms, systems, software.</div></div></div>
+          <div class="traj-step"><div class="ts-stage">02</div><div><div class="ts-name">Software Engineering</div><div class="ts-note">~3 years at HighRadius shipping cloud products for Fortune 2000.</div></div></div>
+          <div class="traj-step"><div class="ts-stage">03</div><div><div class="ts-name">Machine Learning</div><div class="ts-note">M.Sc. ML &amp; Data Analytics, Hochschule Aalen.</div></div></div>
+          <div class="traj-step"><div class="ts-stage">04</div><div><div class="ts-name">Research</div><div class="ts-note">Astronomy ML at MPIA; KAN &amp; explainable AI at Aalen.</div></div></div>
+          <div class="traj-step"><div class="ts-stage">05</div><div><div class="ts-name">Industrial ML</div><div class="ts-note">Zeiss &amp; Matworks — computer vision in real production.</div></div></div>
         </div>
       </div>
       <div class="about-body rv rv-d1">
-        <p>My research interests centre on <strong>understanding what neural networks actually learn</strong> — neuron-activation analysis, empirical model studies on benchmarks like CIFAR-10, and efficiency through pruning — alongside newer architectures such as <strong>Kolmogorov–Arnold Networks</strong> and their symbolic interpretations.</p>
-        <p>In parallel I ship: a semiconductor defect-detection framework at <strong>Carl Zeiss SMT</strong>, a production YOLOv9c inspection tool at <strong>Matworks</strong>, and an open-source LLM forecasting agent for <strong>Google Summer of Code</strong>. I care about ML that is both rigorous and useful.</p>
+        <p>My career spans <strong>production software engineering</strong>, industrial and research machine learning, computer vision, and LLM / multi-agent systems. Nearly three years at <strong>HighRadius</strong> delivering software for Fortune 2000 clients came first, then industrial ML at <strong>Carl Zeiss SMT</strong> and <strong>Matworks</strong>, research ML at the <strong>Max Planck Institute for Astronomy</strong>, and explainable-AI research at Aalen.</p>
+        <p>I build PyTorch training and evaluation pipelines, curate and preprocess datasets, deploy computer-vision models, and ship tools engineers actually use — and I work with LLMs, retrieval-augmented generation, tool calling and agentic systems. I care about ML that is both <strong>rigorous and honest</strong>: reporting when a model doesn&rsquo;t work matters as much as celebrating when it does.</p>
 
         <div class="edu-block">
           <div class="edu-h">Education</div>
-          <div class="edu-item"><div><div class="ed-deg">M.Sc. Machine Learning &amp; Data Analytics</div><div class="ed-sch">Aalen University, Germany</div></div><div class="ed-when">2025 — Present</div></div>
-          <div class="edu-item"><div><div class="ed-deg">B.Tech Computer Science &amp; Engineering</div><div class="ed-sch">KIIT University, India · GPA 1.8 (German scale)</div></div><div class="ed-when">2018 — 2022</div></div>
+          <div class="edu-item"><div><div class="ed-deg">M.Sc. Machine Learning &amp; Data Analytics</div><div class="ed-sch">Hochschule Aalen, Germany</div></div><div class="ed-when">Mar 2025 — 2027</div></div>
+          <div class="edu-item"><div><div class="ed-deg">B.Tech Computer Science &amp; Engineering</div><div class="ed-sch">KIIT University, India · Top of class · 1.8 (German scale)</div></div><div class="ed-when">2018 — 2022</div></div>
         </div>
+        <ul class="honours">
+          <li>Selected among the top 50 participants for the AI for Energy Summer School (Belgium).</li>
+          <li>Cisco CCNAv7 certified; further certifications in Python, Microsoft and Oracle technologies.</li>
+        </ul>
         <div class="langs">
-          <span class="lg"><b>English</b> — Fluent</span>
+          <span class="lg"><b>English</b> — Fluent (B2)</span>
           <span class="lg"><b>Hindi</b> — Native</span>
-          <span class="lg"><b>German</b> — Basic</span>
+          <span class="lg"><b>German</b> — Basic, improving</span>
         </div>
       </div>
     </div>
@@ -870,7 +1003,6 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
   /* ---------- HERO LOAD ---------- */
   window.addEventListener('load', function(){
     requestAnimationFrame(function(){ document.getElementById('hero').classList.add('loaded'); });
-    // stagger hero reveal items
     var items = document.querySelectorAll('#hero .rv');
     items.forEach(function(el,i){ setTimeout(function(){ el.classList.add('in'); }, 380 + i*120); });
   });
@@ -907,19 +1039,18 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
   /* ---------- NAV SCROLL + PROGRESS ---------- */
   var nav = document.getElementById('nav');
   var prog = document.getElementById('prog');
+  var tl = document.getElementById('timeline'), tlProg = document.getElementById('tlProg');
   function onScroll(){
     var y = window.pageYOffset;
     nav.classList.toggle('scrolled', y > 60);
     var h = document.documentElement.scrollHeight - innerHeight;
     prog.style.width = (h>0 ? (y/h*100) : 0) + '%';
-    // timeline progress
     if(tl){
       var r = tl.getBoundingClientRect();
       var vis = Math.min(Math.max((innerHeight*0.7 - r.top)/(r.height), 0), 1);
       tlProg.style.height = (vis*100)+'%';
     }
   }
-  var tl = document.getElementById('timeline'), tlProg = document.getElementById('tlProg');
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
 
@@ -945,7 +1076,6 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       });
     }, {threshold:0.16, rootMargin:'0px 0px -8% 0px'});
     document.querySelectorAll('.rv, .c-huge, [data-count]').forEach(function(el){
-      // don't observe hero rv (handled on load)
       if(el.closest('#hero')) return;
       io.observe(el);
     });
@@ -979,11 +1109,10 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     fbtns.forEach(function(x){x.classList.remove('active');}); b.classList.add('active');
     var f = b.getAttribute('data-filter');
     document.querySelectorAll('.proj').forEach(function(p){
-      var show = (f==='all') || (p.getAttribute('data-cat')||'').indexOf(f)>-1;
+      var show = (f==='all') || (p.getAttribute('data-cat')||'').split(' ').indexOf(f)>-1;
       p.classList.toggle('hide', !show);
     });
   });});
-  // mouse-follow spotlight on project visuals
   document.querySelectorAll('.proj-visual').forEach(function(v){
     v.addEventListener('mousemove', function(e){
       var r = v.getBoundingClientRect();
@@ -999,7 +1128,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
     var spy = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
         if(en.isIntersecting){
-          Object.values(navMap).forEach(function(a){a.classList.remove('active');});
+          Object.keys(navMap).forEach(function(k){navMap[k].classList.remove('active');});
           var a = navMap[en.target.id]; if(a) a.classList.add('active');
         }
       });
@@ -1055,7 +1184,6 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         if(p.x<-20)p.x=W+20; if(p.x>W+20)p.x=-20;
         if(p.y<-20)p.y=H+20; if(p.y>H+20)p.y=-20;
       }
-      // links
       for(var i=0;i<pts.length;i++){
         for(var j=i+1;j<pts.length;j++){
           var a=pts[i], b=pts[j];
@@ -1069,7 +1197,6 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
           }
         }
       }
-      // nodes
       for(var i=0;i<pts.length;i++){
         var p=pts[i];
         var px=p.x+ox*p.r*0.4, py=p.y+oy*p.r*0.4;
