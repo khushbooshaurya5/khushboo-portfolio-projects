@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Real-time Hand Gesture — MediaPipe</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:680px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  .stage{position:relative;width:100%;aspect-ratio:4/3;background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  video,canvas.ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  video{transform:scaleX(-1)}
+  .gcard{position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:14px;background:rgba(15,15,16,.62);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:12px 18px 12px 14px}
+  .gcard .em{font-size:44px;line-height:1}
+  .gcard .tx{display:flex;flex-direction:column}
+  .gcard .nm{font-size:19px;letter-spacing:.3px}
+  .gcard .hint{font-size:10px;color:var(--muted);margin-top:2px;min-height:12px}
+  .fps{position:absolute;right:12px;top:10px;font-size:10px;color:var(--muted);background:rgba(0,0,0,.4);padding:3px 8px;border-radius:6px;letter-spacing:.5px}
+  .overlay-start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(15,15,16,.55);text-align:center;padding:20px}
+  .overlay-start.hidden{display:none}
+  button.go{font-family:var(--mono);font-size:13px;color:#0F0F10;background:var(--accent);border:0;border-radius:9px;padding:11px 22px;cursor:pointer;letter-spacing:.4px;font-weight:600}
+  button.go:disabled{opacity:.45;cursor:default}
+  button.go:not(:disabled):hover{filter:brightness(1.08)}
+  .status{font-size:11px;color:var(--muted);margin:12px 0 0;min-height:16px}
+  .legend{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:5px 11px;background:var(--panel)}
+  .priv{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.6}
+  .priv b{color:var(--ink)}
+  .foot{margin-top:22px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+</style>
+  <script type="module" crossorigin src="./assets/index-RPP4KIuG.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Real-time Hand Gesture Recognition</h1>
+  <p class="lead"><span class="tag">Runs entirely in your browser.</span> <b>MediaPipe</b> tracks <b>21 3D landmarks</b> per hand at video frame-rate; a small geometric classifier reads finger states into gestures. No frames ever leave your device — the model and inference run client-side on the GPU via WebAssembly.</p>
+
+  <div class="stage" id="stage">
+    <video id="cam" playsinline muted></video>
+    <canvas class="ov" id="overlay"></canvas>
+    <div class="fps" id="fps">—</div>
+    <div class="gcard">
+      <div class="em" id="gEmoji">🖐</div>
+      <div class="tx"><div class="nm" id="gName">ready</div><div class="hint" id="gHint">enable the camera to begin</div></div>
+    </div>
+    <div class="overlay-start" id="startOverlay">
+      <div style="font-size:13px;color:var(--ink)">Live hand tracking needs your camera.</div>
+      <button class="go" id="start" disabled>Enable camera</button>
+    </div>
+  </div>
+  <div class="status" id="status">loading…</div>
+
+  <div class="legend">
+    <span class="chip">✊ Fist</span><span class="chip">✋ Open Palm</span><span class="chip">✌️ Peace</span>
+    <span class="chip">👍 Thumbs Up</span><span class="chip">☝️ Pointing</span><span class="chip">🤙 Call Me</span>
+    <span class="chip">🤟 Love</span><span class="chip">🤘 Rock On</span><span class="chip">👌 OK</span>
+  </div>
+
+  <p class="priv"><b>Private by design:</b> the camera stream stays in the page — nothing is uploaded, recorded, or sent to a server. Close the tab and it's gone.</p>
+
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/khushboo-portfolio-projects/tree/main/demos/hand-gesture" target="_blank" rel="noreferrer">code ↗</a></div>
+</div>
+</body>
+</html>
