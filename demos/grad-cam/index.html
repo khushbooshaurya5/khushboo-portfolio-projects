@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Grad-CAM Explainability — CNN</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:660px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  .sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:16px 0 10px}
+  .gallery{display:flex;gap:8px;flex-wrap:wrap}
+  .thumb{width:48px;height:48px;border:1px solid var(--line);border-radius:7px;image-rendering:pixelated;cursor:pointer;background:#000;transition:.2s}
+  .thumb:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .thumb.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(217,80,46,.3)}
+  .stage{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .card h3{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:500}
+  canvas.view{width:100%;max-width:200px;aspect-ratio:1;image-rendering:pixelated;border-radius:8px;background:#000;display:block;margin:0 auto}
+  #cCam{image-rendering:auto}
+  .preds{margin-top:20px}
+  .pred{display:flex;align-items:center;gap:10px;margin:6px 0;cursor:pointer;padding:3px 4px;border-radius:6px}
+  .pred:hover{background:#1c1b18}
+  .pred.active{background:rgba(217,80,46,.12)}
+  .pred .pname{width:96px;font-size:12px;text-align:right;color:var(--ink)}
+  .pred .pbarwrap{flex:1;height:12px;background:#1e1e22;border-radius:6px;overflow:hidden}
+  .pred .pbar{height:100%;background:var(--accent);border-radius:6px;transition:width .3s}
+  .pred .pval{width:52px;font-size:11px;color:var(--muted)}
+  .hint{font-size:11px;color:var(--muted);margin-top:8px}
+  .status{font-size:11px;color:var(--muted);margin:8px 0;min-height:16px}
+  .foot{margin-top:24px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+  @media(max-width:560px){.stage{grid-template-columns:1fr}}
+</style>
+  <script type="module" crossorigin src="./assets/index-wDfzk13Z.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Grad-CAM Explainability</h1>
+  <p class="lead"><span class="tag">Real CNN, live in your browser.</span> A convolutional classifier (PyTorch, FashionMNIST) predicts the class — and <b>Grad-CAM</b> shows <b>where</b> it looked to decide. For this global-average-pooling network Grad-CAM reduces exactly to a class-weighted sum of the last conv feature maps. Click any predicted class to see its own map. Runs client-side via ONNX.</p>
+
+  <div class="sec-label">Pick an image</div>
+  <div class="gallery" id="gallery"></div>
+  <div class="status" id="status">loading model…</div>
+
+  <div class="stage">
+    <div class="card"><h3>Input</h3><canvas class="view" id="cIn" width="28" height="28"></canvas></div>
+    <div class="card"><h3>Grad-CAM <span id="camfor" style="color:var(--accent)"></span></h3><canvas class="view" id="cCam" width="200" height="200"></canvas></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:22px">Predictions <span style="color:var(--muted);text-transform:none;letter-spacing:0">— click to view that class's map</span></div>
+  <div class="preds" id="preds"></div>
+
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/khushboo-portfolio-projects/tree/main/demos/grad-cam" target="_blank" rel="noreferrer">code + training script ↗</a></div>
+</div>
+</body>
+</html>
