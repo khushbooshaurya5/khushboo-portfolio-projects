@@ -92,7 +92,7 @@ function drawLiDAR(overlay){
     const yy=horizon + (H-horizon)*Math.pow(u,0.7);
     const spread=(1-u)*0.18; const xx=vp.x + (Math.random()*2-1)*(W*(0.06+ (1-u)*0.34));
     if(xx<0||xx>W)continue;
-    const t=1-u; x.fillStyle=depthColor(Math.min(1,u*1.05)); x.globalAlpha=overlay?0.85:1;
+    x.fillStyle=depthColor(Math.min(1,(1-u)*1.05)); x.globalAlpha=overlay?0.85:1; // bottom of image = nearest = red
     x.fillRect(xx, yy, 2.2, 2.2);
   }
   // car-surface points (denser, nearer)
