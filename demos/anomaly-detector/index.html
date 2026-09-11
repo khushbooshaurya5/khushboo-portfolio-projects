@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Anomaly & Defect Detector — Autoencoder</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--good:#35c2a8;--bad:#e0533a;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:680px}
+  .lead b{color:var(--ink)}
+  .tag{color:var(--accent)}
+  .sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:18px 0 10px}
+  .gallery{display:flex;gap:10px;flex-wrap:wrap}
+  .thumb{width:56px;height:56px;border:1px solid var(--line);border-radius:8px;image-rendering:pixelated;cursor:pointer;background:#000;transition:.2s;object-fit:cover}
+  .thumb:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .thumb.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(217,80,46,.3)}
+  .thumb.k-normal{outline:0}
+  .glabel{font-size:9px;color:var(--muted);text-align:center;margin-top:3px;letter-spacing:.5px}
+  .gitem{display:flex;flex-direction:column;align-items:center}
+  .stage{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+  .card h3{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:500}
+  canvas.view{width:100%;max-width:180px;aspect-ratio:1;image-rendering:pixelated;border-radius:8px;background:#000;display:block;margin:0 auto}
+  .verdict{margin-top:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .badge{font-size:15px;font-weight:600;padding:9px 18px;border-radius:9px;letter-spacing:.5px}
+  .badge.good{background:rgba(53,194,168,.15);color:var(--good);border:1px solid var(--good)}
+  .badge.bad{background:rgba(224,83,58,.15);color:var(--bad);border:1px solid var(--bad)}
+  .scorewrap{flex:1;min-width:240px}
+  .scorebar{position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#35c2a8,#f0d24b,#e0533a);overflow:visible}
+  .scoremark{position:absolute;top:-4px;width:3px;height:20px;background:var(--ink);border-radius:2px}
+  .thrmark{position:absolute;top:-7px;width:2px;height:26px;background:var(--muted)}
+  .scoretxt{font-size:11px;color:var(--muted);margin-top:8px}
+  .scoretxt b{color:var(--ink)}
+  .foot{margin-top:26px;font-size:11px;color:var(--muted)}
+  .foot a{color:var(--accent);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+  .status{font-size:11px;color:var(--muted);margin-top:8px;min-height:16px}
+  button.upload{font-family:var(--mono);font-size:11px;color:var(--ink);background:#1e1e22;border:1px solid var(--line);border-radius:7px;padding:7px 12px;cursor:pointer;margin-left:6px}
+  button.upload:hover{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:560px){.stage{grid-template-columns:1fr}}
+</style>
+  <script type="module" crossorigin src="./assets/index-rrU7g4TV.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Anomaly &amp; Defect Detector</h1>
+  <p class="lead"><span class="tag">Real model, live in your browser.</span> A convolutional <b>autoencoder</b> trained <b>only on normal images</b> (FashionMNIST "Trouser") learns to reconstruct what *normal* looks like — so a high <b>reconstruction error</b> localizes anomalies and defects it never saw in training. Unsupervised, no labels. Same idea as my industrial defect-detection work, running client-side via ONNX.</p>
+
+  <div class="sec-label">Pick a sample — <span style="color:var(--good)">normal</span> · <span style="color:var(--accent)">anomaly (other class)</span> · <span style="color:var(--accent)">defect (scratch / hole)</span></div>
+  <div class="gallery" id="gallery"></div>
+  <div class="status" id="status">loading model…</div>
+
+  <div class="stage">
+    <div class="card"><h3>Input</h3><canvas class="view" id="cIn" width="28" height="28"></canvas></div>
+    <div class="card"><h3>Reconstruction</h3><canvas class="view" id="cRe" width="28" height="28"></canvas></div>
+    <div class="card"><h3>Anomaly heatmap</h3><canvas class="view" id="cEr" width="28" height="28"></canvas></div>
+  </div>
+
+  <div class="verdict">
+    <span class="badge good" id="badge">—</span>
+    <div class="scorewrap">
+      <div class="scorebar"><div class="thrmark" id="thrmark"></div><div class="scoremark" id="scoremark" style="left:0%"></div></div>
+      <div class="scoretxt" id="scoretxt">reconstruction error vs. learned normal threshold</div>
+    </div>
+  </div>
+
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a id="codelink" href="https://github.com/khushbooshaurya5/khushboo-portfolio-projects/tree/main/demos/anomaly-detector" target="_blank" rel="noreferrer">code + training script ↗</a></div>
+</div>
+</body>
+</html>
