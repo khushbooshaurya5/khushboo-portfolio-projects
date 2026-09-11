@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Prune Latency Bench — WASM vs WebGPU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.19.2/dist/ort.webgpu.min.js"></script>
+<style>
+  :root{
+    --bg:#eef1f4; --panel:#ffffff; --ink:#182029; --muted:#5c6773; --line:#d5dce3;
+    --accent:#0e7c86; --accent-soft:#d7ecee; --clay:#b5643c; --clay-soft:#f0e0d6;
+    --gpu:#5a4b8a; --gpu-soft:#e5e0f2; --good:#0e7c86;
+    --shadow:0 1px 2px rgba(24,32,41,.06),0 6px 20px rgba(24,32,41,.06);
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#12171d; --panel:#1a212a; --ink:#e7edf3; --muted:#93a1b0; --line:#2b3641;
+    --accent:#3fb6c0; --accent-soft:#123338; --clay:#d68b63; --clay-soft:#33251d;
+    --gpu:#a99bd6; --gpu-soft:#282142; --good:#3fb6c0;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#12171d; --panel:#1a212a; --ink:#e7edf3; --muted:#93a1b0; --line:#2b3641;
+    --accent:#3fb6c0; --accent-soft:#123338; --clay:#d68b63; --clay-soft:#33251d;
+    --gpu:#a99bd6; --gpu-soft:#282142; --good:#3fb6c0;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px;margin:0 auto;padding-block:28px;padding-left:18px;padding-right:18px;}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:10px;}
+  h1{font-size:1.45rem;font-weight:600;letter-spacing:-.01em;margin:0 0 4px;text-wrap:balance;}
+  header p{margin:0 0 18px;color:var(--muted);font-size:.92rem;max-width:56ch;}
+  .device{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;}
+  .chip{font-family:var(--mono);font-size:.72rem;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 11px;color:var(--muted);display:inline-flex;gap:6px;align-items:center;}
+  .chip b{color:var(--ink);font-weight:500;} .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);} .chip .dot.on{background:var(--good);}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 16px 6px;margin-bottom:16px;overflow-x:auto;}
+  .run{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap;}
+  button.go{font-family:var(--sans);font-weight:600;font-size:.92rem;color:#fff;background:var(--accent);border:0;border-radius:10px;padding:11px 20px;cursor:pointer;transition:filter .15s;}
+  button.go:hover:not(:disabled){filter:brightness(1.07)} button.go:disabled{opacity:.5;cursor:default}
+  button.go:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .status{font-family:var(--mono);font-size:.78rem;color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:460px;}
+  th,td{text-align:right;padding:9px 6px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1.5px solid var(--line);}
+  tbody tr:last-child td{border-bottom:0;}
+  .mname{font-weight:500;}
+  .tag{font-family:var(--mono);font-size:.66rem;padding:2px 7px;border-radius:5px;margin-left:7px;vertical-align:middle;}
+  .tag.dense{background:var(--line);color:var(--muted);} .tag.struct{background:var(--accent-soft);color:var(--accent);} .tag.unstruct{background:var(--clay-soft);color:var(--clay);}
+  .lat{font-family:var(--mono);font-weight:500;} .gpu{color:var(--gpu);}
+  .sub{color:var(--muted);font-family:var(--mono);font-size:.74rem;}
+  .out label{font-size:.74rem;color:var(--muted);display:block;margin-bottom:6px;}
+  textarea{width:100%;height:120px;font-family:var(--mono);font-size:.72rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px;resize:vertical;}
+  .copy{font-family:var(--sans);font-size:.8rem;color:var(--accent);background:transparent;border:1px solid var(--line);border-radius:8px;padding:7px 13px;cursor:pointer;margin-top:8px;}
+  .copy:hover{border-color:var(--accent);}
+  .note{font-size:.78rem;color:var(--muted);margin-top:14px;line-height:1.6;} .note b{color:var(--ink);font-weight:500;}
+  footer{margin-top:22px;font-size:.74rem;color:var(--muted);font-family:var(--mono);} footer a{color:var(--accent);text-decoration:none;} footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">In-browser latency · WASM vs WebGPU · your device</div>
+    <h1>Pruned-CNN latency: does WebGPU change the story?</h1>
+    <p>Companion to the paper <em>“Sparsity Is Not Speed.”</em> Every model runs entirely in this browser via ONNX Runtime. Press <b>Run</b> to time real inference on <em>both</em> the WASM and WebGPU backends of your own hardware.</p>
+  </header>
+
+  <div class="device" id="device"></div>
+
+  <div class="run">
+    <button class="go" id="run">Run benchmark</button>
+    <span class="status" id="status">loading runtime…</span>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr>
+        <th>Model</th><th>Size</th><th>Server*</th><th>WASM</th><th>WebGPU</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="card out">
+    <label for="json">Results — paste back to add your device to the paper</label>
+    <textarea id="json" readonly placeholder="run the benchmark to generate…"></textarea>
+    <button class="copy" id="copy">Copy results</button>
+  </div>
+
+  <p class="note"><b>*Server</b> = the paper's reference machine (Intel Xeon @2.10 GHz, single-thread WASM). Structured pruning cuts real latency; unstructured 90% barely does — the runtime still multiplies the zeros. WebGPU adds a data-transfer + kernel-launch overhead that can make these <em>small</em> models slower on the GPU than on WASM — itself a useful finding.</p>
+  <footer>onnxruntime-web 1.19.2 · FashionMNIST CNN · <a href="../../">← portfolio</a></footer>
+</div>
+
+<script>
+const MODELS = [
+  {file:"models/base.onnx",        name:"Dense (base)",     method:"dense",    size:"7.40 MB", server:3.3},
+  {file:"models/struct_s50.onnx",  name:"Structured 50%",   method:"struct",   size:"3.47 MB", server:1.1},
+  {file:"models/struct_s70.onnx",  name:"Structured 70%",   method:"struct",   size:"2.01 MB", server:0.5},
+  {file:"models/struct_s90.onnx",  name:"Structured 90%",   method:"struct",   size:"0.68 MB", server:0.2},
+  {file:"models/unstruct_s90.onnx",name:"Unstructured 90%", method:"unstruct", size:"7.40 MB", server:2.6},
+];
+const TAG = {dense:"dense", struct:"structured", unstruct:"unstructured"};
+ort.env.wasm.numThreads = 1;
+
+const $ = id => document.getElementById(id);
+const median = a => { const s=[...a].sort((x,y)=>x-y); return s[Math.floor(s.length/2)]; };
+const mkFeed = () => { const a=new Float32Array(784); for(let i=0;i<784;i++) a[i]=Math.random();
+  return {input:new ort.Tensor("float32",a,[1,1,28,28])}; };
+
+function devInfo(){
+  const ua=navigator.userAgent; let dev="This device";
+  if(/iPhone|iPad|iPod/.test(ua))dev="iPhone / iPad"; else if(/Android/.test(ua))dev="Android phone";
+  else if(/Macintosh/.test(ua))dev="Mac"; else if(/Windows/.test(ua))dev="Windows PC"; else if(/Linux/.test(ua))dev="Linux";
+  return {device:dev, cores:navigator.hardwareConcurrency||"?", mem:navigator.deviceMemory||null, webgpu:!!navigator.gpu, ua};
+}
+const D = devInfo();
+
+function renderDevice(){
+  const rows=[["Device",D.device],["Cores",D.cores], D.mem?["Memory",D.mem+" GB"]:null,
+    ["WebGPU", D.webgpu?"available":"not present"]].filter(Boolean);
+  $("device").innerHTML = rows.map(([k,v])=>{
+    const on=(k==="WebGPU"&&D.webgpu)?" on":""; const dot=k==="WebGPU"?`<span class="dot${on}"></span>`:"";
+    return `<span class="chip">${k} ${dot}<b>${v}</b></span>`;
+  }).join("");
+}
+function renderRows(){
+  $("rows").innerHTML = MODELS.map((m,i)=>`<tr>
+    <td><span class="mname">${m.name}</span><span class="tag ${m.method}">${TAG[m.method]}</span></td>
+    <td class="sub">${m.size}</td>
+    <td class="sub">${m.server.toFixed(1)} ms</td>
+    <td class="lat" id="w${i}">—</td>
+    <td class="lat gpu" id="g${i}">—</td>
+  </tr>`).join("");
+}
+
+async function bench(url, ep){
+  const sess = await ort.InferenceSession.create(url, {executionProviders:[ep]});
+  const warm = ep==="webgpu" ? 15 : 8;               // WebGPU needs more warmup (shader compile)
+  for(let i=0;i<warm;i++) await sess.run(mkFeed());
+  const t=[]; for(let i=0;i<50;i++){ const f=mkFeed(); const s=performance.now(); await sess.run(f); t.push(performance.now()-s); }
+  await sess.release?.();
+  return +median(t).toFixed(3);
+}
+
+async function run(){
+  $("run").disabled=true; const results=[];
+  for(let i=0;i<MODELS.length;i++){
+    const m=MODELS[i];
+    $("status").textContent=`WASM · ${m.name}…`;
+    let w=null,g=null;
+    try{ w=await bench("./"+m.file,"wasm"); $("w"+i).textContent=w.toFixed(2)+" ms"; }
+    catch(e){ $("w"+i).textContent="err"; }
+    if(D.webgpu){
+      $("status").textContent=`WebGPU · ${m.name}…`;
+      try{ g=await bench("./"+m.file,"webgpu"); $("g"+i).textContent=g.toFixed(2)+" ms"; }
+      catch(e){ $("g"+i).textContent="n/a"; }
+    } else { $("g"+i).textContent="—"; }
+    results.push({model:m.name, method:m.method, server_ms:m.server, wasm_ms:w, webgpu_ms:g});
+  }
+  $("status").textContent="done — measured on your device.";
+  $("run").disabled=false;
+  $("json").value = JSON.stringify({device:D.device, cores:D.cores, memory_gb:D.mem, webgpu:D.webgpu,
+    ua:D.ua, runtime:"onnxruntime-web@1.19.2", results}, null, 2);
+}
+
+$("copy").addEventListener("click",()=>{ const ta=$("json"); ta.select();
+  try{navigator.clipboard.writeText(ta.value);}catch(e){document.execCommand("copy");}
+  $("copy").textContent="Copied ✓"; setTimeout(()=>$("copy").textContent="Copy results",1500); });
+$("run").addEventListener("click", run);
+renderDevice(); renderRows();
+(function ready(){ if(window.ort&&ort.InferenceSession){ $("status").textContent="ready — press Run."; } else setTimeout(ready,150); })();
+</script>
+</body>
+</html>
