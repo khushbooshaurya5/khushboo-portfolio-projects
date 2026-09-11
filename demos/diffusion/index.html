@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>2D Diffusion — watch it denoise</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:820px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:660px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  .sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:16px 0 10px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+  .shape{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;transition:.15s;text-transform:capitalize}
+  .shape:hover{border-color:var(--accent)}
+  .shape.on{border-color:var(--accent);color:var(--accent);background:rgba(217,80,46,.1)}
+  button.run{font-family:var(--mono);font-size:12px;color:#0F0F10;background:var(--accent);border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font-weight:600;margin-left:auto}
+  button.run:hover{filter:brightness(1.08)}
+  label.tgt{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer}
+  .stagewrap{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;padding:0}
+  canvas{display:block;width:100%;background:#0F0F10}
+  .hud{position:absolute;left:12px;top:10px;font-size:11px;color:var(--muted);background:rgba(0,0,0,.35);padding:3px 9px;border-radius:6px;letter-spacing:.5px}
+  .barwrap{height:5px;background:#1e1e22;border-radius:3px;margin-top:12px;overflow:hidden}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,#5a6070,var(--accent));border-radius:3px;transition:width .05s linear}
+  .status{font-size:11px;color:var(--muted);margin-top:10px;min-height:16px}
+  .foot{margin-top:22px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+</style>
+  <script type="module" crossorigin src="./assets/index-BjtloxIb.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>2D Diffusion — watch it denoise</h1>
+  <p class="lead"><span class="tag">A generative model, live in your browser.</span> A tiny <b>denoising diffusion model</b> (PyTorch, DDPM) learned to turn pure Gaussian noise into a target distribution. Press a shape and watch <b>1,600 particles</b> run the <b>reverse process</b> — 200 denoising steps, each one a real neural-net inference via ONNX — until the noise resolves into the shape. One class-conditional model draws all four.</p>
+
+  <div class="sec-label">Choose a target — it samples from noise</div>
+  <div class="controls">
+    <div id="shapes" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <label class="tgt"><input type="checkbox" id="tgt"/> show target</label>
+    <button class="run" id="run">Run ▶</button>
+  </div>
+
+  <div class="stagewrap">
+    <canvas id="stage" width="560" height="560"></canvas>
+    <div class="hud" id="stepv">t = —</div>
+  </div>
+  <div class="barwrap"><div class="bar" id="bar"></div></div>
+  <div class="status" id="status">loading…</div>
+
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/khushboo-portfolio-projects/tree/main/demos/diffusion" target="_blank" rel="noreferrer">code + training script ↗</a></div>
+</div>
+</body>
+</html>
