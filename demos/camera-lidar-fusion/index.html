@@ -87,7 +87,7 @@ function depthColor(t){ // t 0(near)->1(far)
 }
 function drawLiDAR(overlay){
   // ground points
-  for(let i=0;i<2600;i++){
+  for(let i=0;i<6200;i++){
     const u=Math.random(), road=0.30+ (0.50)*u; // wider near bottom
     const yy=horizon + (H-horizon)*Math.pow(u,0.7);
     const spread=(1-u)*0.18; const xx=vp.x + (Math.random()*2-1)*(W*(0.06+ (1-u)*0.34));
@@ -96,7 +96,7 @@ function drawLiDAR(overlay){
     x.fillRect(xx, yy, 2.2, 2.2);
   }
   // car-surface points (denser, nearer)
-  cars.forEach((c,ci)=>{ const near=ci===0?0.28:0.52; for(let i=0;i<420;i++){ const px=c.x-c.w/2+Math.random()*c.w, py=c.y-c.h*0.5+Math.random()*c.h*0.9; x.fillStyle=depthColor(near+Math.random()*0.06); x.globalAlpha=overlay?0.9:1; x.fillRect(px,py,2.4,2.4);} });
+  cars.forEach((c,ci)=>{ const near=ci===0?0.28:0.52; for(let i=0;i<780;i++){ const px=c.x-c.w/2+Math.random()*c.w, py=c.y-c.h*0.5+Math.random()*c.h*0.9; x.fillStyle=depthColor(near+Math.random()*0.06); x.globalAlpha=overlay?0.9:1; x.fillRect(px,py,2.4,2.4);} });
   x.globalAlpha=1;
 }
 // Fusion: semantic segmentation regions
