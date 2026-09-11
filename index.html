@@ -156,6 +156,13 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .wi-row[href]:hover .wi-name{color:var(--accent)}
 .wi-arrow{font-family:var(--mono);color:var(--accent);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s var(--ease)}
 .wi-row[href]:hover .wi-arrow{opacity:1;transform:none}
+.wi-meta{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.wi-links{display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.wi-links a{color:var(--muted);text-decoration:none;white-space:nowrap;transition:color .3s var(--ease)}
+.wi-links a.live{color:var(--accent)}
+.wi-links a:hover{color:var(--ink)}
+.wi-links a.live:hover{opacity:.8;color:var(--accent)}
+.wi-demo:hover .wi-name{color:var(--accent)}
 
 .filters{display:flex;flex-wrap:wrap;gap:10px;margin:60px 0 44px}
 .filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
@@ -711,21 +718,39 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <span class="eyebrow rv">Live</span>
       <h3 class="sec-title rv rv-d1" style="font-size:clamp(1.5rem,3.4vw,2.4rem);margin:18px 0 30px">Interactive demos.</h3>
       <div class="work-index">
-        <a class="wi-row rv" href="https://khushbooshaurya5.github.io/depth-playground/" target="_blank" rel="noreferrer" style="color:inherit;text-decoration:none">
+        <div class="wi-row wi-demo rv">
           <span class="wi-num">D/01</span>
-          <span class="wi-name">Depth Playground · LIVE <span class="wi-arrow">↗</span></span>
-          <span class="wi-cat">Photo → in-browser depth + 3D · transformers.js · three.js</span>
-        </a>
-        <a class="wi-row rv" href="https://khushbooshaurya5.github.io/lidar-pointcloud-viewer/" target="_blank" rel="noreferrer" style="color:inherit;text-decoration:none">
+          <span class="wi-name">Depth Playground · LIVE</span>
+          <span class="wi-meta">
+            <span class="wi-cat">Photo → in-browser depth + 3D · transformers.js · three.js</span>
+            <span class="wi-links">
+              <a class="live" href="https://khushbooshaurya5.github.io/depth-playground/" target="_blank" rel="noreferrer">▶ live ↗</a>
+              <a href="https://github.com/khushbooshaurya5/depth-playground" target="_blank" rel="noreferrer">code ↗</a>
+            </span>
+          </span>
+        </div>
+        <div class="wi-row wi-demo rv">
           <span class="wi-num">D/02</span>
-          <span class="wi-name">LiDAR Point-Cloud Viewer · LIVE <span class="wi-arrow">↗</span></span>
-          <span class="wi-cat">KITTI .bin / .pcd · color by class · BEV · three.js</span>
-        </a>
-        <a class="wi-row rv" href="https://rag-doc-assistant-chi.vercel.app" target="_blank" rel="noreferrer" style="color:inherit;text-decoration:none">
+          <span class="wi-name">LiDAR Point-Cloud Viewer · LIVE</span>
+          <span class="wi-meta">
+            <span class="wi-cat">KITTI .bin / .pcd · color by class · BEV · three.js</span>
+            <span class="wi-links">
+              <a class="live" href="https://khushbooshaurya5.github.io/lidar-pointcloud-viewer/" target="_blank" rel="noreferrer">▶ live ↗</a>
+              <a href="https://github.com/khushbooshaurya5/lidar-pointcloud-viewer" target="_blank" rel="noreferrer">code ↗</a>
+            </span>
+          </span>
+        </div>
+        <div class="wi-row wi-demo rv">
           <span class="wi-num">D/03</span>
-          <span class="wi-name">Multimodal RAG Assistant · LIVE <span class="wi-arrow">↗</span></span>
-          <span class="wi-cat">Chat with PDFs · page citations · Supabase pgvector · Gemini</span>
-        </a>
+          <span class="wi-name">Multimodal RAG Assistant · LIVE</span>
+          <span class="wi-meta">
+            <span class="wi-cat">Chat with PDFs · page citations · Supabase pgvector · Gemini</span>
+            <span class="wi-links">
+              <a class="live" href="https://rag-doc-assistant-chi.vercel.app" target="_blank" rel="noreferrer">▶ live ↗</a>
+              <a href="https://github.com/khushbooshaurya5/rag-doc-assistant" target="_blank" rel="noreferrer">code ↗</a>
+            </span>
+          </span>
+        </div>
       </div>
     </div>
   </div>
