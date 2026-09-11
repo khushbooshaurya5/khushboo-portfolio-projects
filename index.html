@@ -163,6 +163,11 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .wi-links a:hover{color:var(--ink)}
 .wi-links a.live:hover{opacity:.8;color:var(--accent)}
 .wi-demo:hover .wi-name{color:var(--accent)}
+.wi-row.wi-demo{grid-template-columns:auto 128px 1fr auto}
+.wi-thumb{display:block;width:128px;height:80px;border-radius:7px;overflow:hidden;border:1px solid var(--line);background:#0c0c0d;transition:border-color .3s var(--ease),transform .3s var(--ease)}
+.wi-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.wi-thumb:hover{border-color:var(--accent);transform:translateY(-2px)}
+@media(max-width:720px){.wi-row.wi-demo{grid-template-columns:auto 1fr auto}.wi-thumb{display:none}}
 .demo-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
 .demo-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#141311;text-decoration:none;color:inherit;transition:border-color .3s,transform .3s var(--ease)}
 .demo-card:hover{border-color:var(--accent);transform:translateY(-3px)}
@@ -770,6 +775,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <div class="work-index">
         <div class="wi-row wi-demo rv">
           <span class="wi-num">S/01</span>
+          <a class="wi-thumb" href="https://khushbooshaurya5.github.io/lidar-pointcloud-viewer/" target="_blank" rel="noreferrer"><img src="demos/previews/lidar-semantic-segmentation.jpg" alt="LiDAR viewer preview" loading="lazy"/></a>
           <span class="wi-name">LiDAR Semantic Segmentation</span>
           <span class="wi-meta">
             <span class="wi-cat">SemanticKITTI · range-image + SalsaNet · Lovász-Softmax</span>
@@ -781,6 +787,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         </div>
         <div class="wi-row wi-demo rv">
           <span class="wi-num">S/02</span>
+          <a class="wi-thumb" href="demos/camera-lidar-fusion/"><img src="demos/previews/camera-lidar-fusion.jpg" alt="Camera-LiDAR fusion preview" loading="lazy"/></a>
           <span class="wi-name">Camera–LiDAR Fusion</span>
           <span class="wi-meta">
             <span class="wi-cat">KITTI · two-stream RGB + LiDAR · rgb/lidar/fusion ablation</span>
@@ -792,6 +799,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         </div>
         <div class="wi-row wi-demo rv">
           <span class="wi-num">S/03</span>
+          <a class="wi-thumb" href="https://khushbooshaurya5.github.io/depth-playground/" target="_blank" rel="noreferrer"><img src="demos/previews/monocular-depth-estimation.jpg" alt="Depth playground preview" loading="lazy"/></a>
           <span class="wi-name">Monocular Depth Estimation</span>
           <span class="wi-meta">
             <span class="wi-cat">KITTI · self-supervised depth + ego-motion (Monodepth2-style)</span>
@@ -803,6 +811,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         </div>
         <div class="wi-row wi-demo rv">
           <span class="wi-num">S/04</span>
+          <a class="wi-thumb" href="demos/pointpillars/"><img src="demos/previews/pointpillars.jpg" alt="PointPillars preview" loading="lazy"/></a>
           <span class="wi-name">PointPillars 3D Detection</span>
           <span class="wi-meta">
             <span class="wi-cat">KITTI · pillars → BEV pseudo-image → SSD head · oriented 3D boxes</span>
@@ -814,6 +823,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         </div>
         <div class="wi-row wi-demo rv">
           <span class="wi-num">S/05</span>
+          <a class="wi-thumb" href="demos/bev-map-segmentation/"><img src="demos/previews/bev-map-segmentation.jpg" alt="BEV map segmentation preview" loading="lazy"/></a>
           <span class="wi-name">BEV Map Segmentation</span>
           <span class="wi-meta">
             <span class="wi-cat">nuScenes · Lift-Splat-Shoot · surround cameras → top-down map</span>
@@ -823,21 +833,6 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
             </span>
           </span>
         </div>
-      </div>
-
-      <div class="demo-gallery">
-        <a class="demo-card rv" href="demos/pointpillars/">
-          <img src="demos/previews/pointpillars.jpg" alt="PointPillars 3D detection — LiDAR point cloud with oriented 3D boxes" loading="lazy"/>
-          <span class="dc-t"><b>PointPillars 3D Detection</b><span class="live">▶ live</span></span>
-        </a>
-        <a class="demo-card rv" href="demos/bev-map-segmentation/">
-          <img src="demos/previews/bev-map-segmentation.jpg" alt="BEV map segmentation — top-down semantic grid with surround cameras" loading="lazy"/>
-          <span class="dc-t"><b>BEV Map Segmentation</b><span class="live">▶ live</span></span>
-        </a>
-        <a class="demo-card rv" href="demos/camera-lidar-fusion/">
-          <img src="demos/previews/camera-lidar-fusion.jpg" alt="Camera-LiDAR fusion — RGB + projected LiDAR semantic segmentation" loading="lazy"/>
-          <span class="dc-t"><b>Camera–LiDAR Fusion</b><span class="live">▶ live</span></span>
-        </a>
       </div>
     </div>
   </div>
