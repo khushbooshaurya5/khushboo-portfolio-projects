@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>BEV Map Segmentation (Lift-Splat-Shoot) — Interactive Demo</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono);overflow:hidden}
+  #c{position:fixed;inset:0;display:block}
+  .hud{position:fixed;left:16px;top:16px;max-width:min(370px,86vw);z-index:5}
+  .hud h1{font-size:15px;margin:0 0 4px;letter-spacing:.5px}
+  .hud p{font-size:11px;line-height:1.5;color:var(--muted);margin:0 0 10px}
+  .hud .tag{color:var(--accent)}
+  .panel{background:rgba(23,23,26,.82);border:1px solid var(--line);border-radius:10px;padding:12px 14px;backdrop-filter:blur(6px)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--ink);background:#1e1e22;border:1px solid var(--line);border-radius:7px;padding:7px 11px;cursor:pointer;transition:.2s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.on{background:var(--accent);border-color:var(--accent);color:#0F0F10;font-weight:600}
+  .legend{position:fixed;right:16px;bottom:16px;font-size:10px;color:var(--muted);z-index:5;text-align:right;line-height:1.8}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-left:6px;vertical-align:middle}
+  .foot{position:fixed;left:16px;bottom:14px;font-size:10px;color:var(--muted);z-index:5}
+  .foot a{color:var(--accent);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+  .hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);font-size:10px;color:#5a564d;z-index:4;pointer-events:none}
+  @media(max-width:600px){.legend{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud">
+  <div class="panel">
+    <h1>BEV Map Segmentation — Lift-Splat-Shoot</h1>
+    <p><span class="tag">Illustrative demo.</span> Surround-view cameras around the ego vehicle are lifted to 3D and <b>splatted</b> into a bird's-eye-view grid, producing a top-down semantic map (drivable area, lane dividers, vehicles). Synthetic scene — the training code (nuScenes) is the real work.</p>
+    <div class="row">
+      <button id="bCams" class="on">Camera frustums</button>
+      <button id="bMap" class="on">BEV map</button>
+      <button id="bSpin" class="on">Auto-rotate</button>
+    </div>
+  </div>
+</div>
+<div class="legend">
+  <div>drivable <i style="background:#3a4658"></i></div>
+  <div>lane divider <i style="background:#f0d24b"></i></div>
+  <div>vehicle <i style="background:#D9502E"></i></div>
+  <div>ego <i style="background:#35c2a8"></i></div>
+</div>
+<div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/bev-map-segmentation" target="_blank" rel="noreferrer">code ↗</a></div>
+<div class="hint">drag to orbit · scroll to zoom</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x0F0F10);
+const camera=new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.1, 800);
+let az=0.7, el=0.9, rad=95, tgt=new THREE.Vector3(0,0,0), spin=true;
+function applyCam(){const ce=Math.cos(el),se=Math.sin(el);camera.position.set(tgt.x+rad*ce*Math.cos(az),tgt.y+rad*se,tgt.z+rad*ce*Math.sin(az));camera.lookAt(tgt);}
+let drag=false,px=0,py=0;
+canvas.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;spin=false;document.getElementById('bSpin').classList.remove('on');});
+addEventListener('pointerup',()=>drag=false);
+addEventListener('pointermove',e=>{if(!drag)return;az-=(e.clientX-px)*0.006;el=Math.max(0.15,Math.min(1.5,el+(e.clientY-py)*0.006));px=e.clientX;py=e.clientY;});
+canvas.addEventListener('wheel',e=>{e.preventDefault();rad=Math.max(45,Math.min(180,rad+e.deltaY*0.06));},{passive:false});
+
+// ---- BEV semantic map drawn to a canvas texture ----
+const S=512, GRID=100; // meters covered
+const mc=document.createElement('canvas'); mc.width=mc.height=S; const mx=mc.getContext('2d');
+function m2px(v){return (v/GRID+0.5)*S;}
+mx.fillStyle='#14171d'; mx.fillRect(0,0,S,S);
+// drivable roads (cross + curve)
+mx.fillStyle='#3a4658';
+mx.fillRect(m2px(-8), 0, m2px(8)-m2px(-8), S);          // vertical road
+mx.fillRect(0, m2px(-7), S, m2px(7)-m2px(-7));          // horizontal road
+// diagonal ramp
+mx.save(); mx.translate(m2px(0),m2px(0)); mx.rotate(-0.6); mx.fillRect(-9, -S, 18, S*2); mx.restore();
+// lane dividers (dashed yellow)
+mx.strokeStyle='#f0d24b'; mx.lineWidth=2.4; mx.setLineDash([10,10]);
+mx.beginPath(); mx.moveTo(m2px(0),0); mx.lineTo(m2px(0),S); mx.stroke();
+mx.beginPath(); mx.moveTo(0,m2px(0)); mx.lineTo(S,m2px(0)); mx.stroke();
+mx.setLineDash([]);
+// vehicles on BEV (orange rects) — [x,z,heading,l,w]
+const veh=[[3,18,0.05,4.4,1.9],[-4,-10,0.05,4.6,2.0],[15,-2,1.57,4.3,1.9],[-22,3,1.57,4.5,2.0],[6,-30,0.05,4.2,1.8]];
+mx.fillStyle='#D9502E';
+veh.forEach(v=>{const[x,z,h,l,w]=v;mx.save();mx.translate(m2px(x),m2px(z));mx.rotate(h);mx.fillRect(-l/GRID*S/2,-w/GRID*S/2,l/GRID*S,w/GRID*S);mx.restore();});
+// ego
+mx.fillStyle='#35c2a8'; mx.save(); mx.translate(m2px(0),m2px(0)); mx.fillRect(-2.3/GRID*S/2,-4.6/GRID*S/2,2.3/GRID*S,4.6/GRID*S); mx.restore();
+const tex=new THREE.CanvasTexture(mc); tex.minFilter=THREE.LinearFilter;
+const mapPlane=new THREE.Mesh(new THREE.PlaneGeometry(GRID,GRID), new THREE.MeshBasicMaterial({map:tex, transparent:true}));
+mapPlane.rotation.x=-Math.PI/2; scene.add(mapPlane);
+// subtle grid over it
+const grid=new THREE.GridHelper(GRID,20,0x2b2925,0x1f1e1b); grid.position.y=0.05; scene.add(grid);
+
+// ---- ego + camera frustums ----
+const camGroup=new THREE.Group(); scene.add(camGroup);
+// ego block
+const ego=new THREE.Mesh(new THREE.BoxGeometry(2.3,1.5,4.6), new THREE.MeshBasicMaterial({color:0x35c2a8}));
+ego.position.y=0.75; scene.add(ego);
+// 6 surround cameras
+const camAngles=[0,60,120,180,240,300];
+camAngles.forEach(deg=>{
+  const a=deg*Math.PI/180;
+  const grp=new THREE.Group(); grp.position.set(0,1.4,0); grp.rotation.y=-a;
+  // frustum wedge
+  const far=18, spread=0.62;
+  const p0=new THREE.Vector3(0,0,0);
+  const p1=new THREE.Vector3(Math.sin(spread)*far,3,Math.cos(spread)*far);
+  const p2=new THREE.Vector3(-Math.sin(spread)*far,3,Math.cos(spread)*far);
+  const p3=new THREE.Vector3(Math.sin(spread)*far,-2,Math.cos(spread)*far);
+  const p4=new THREE.Vector3(-Math.sin(spread)*far,-2,Math.cos(spread)*far);
+  const lg=new THREE.BufferGeometry().setFromPoints([p0,p1, p0,p2, p0,p3, p0,p4, p1,p2, p3,p4, p1,p3, p2,p4]);
+  grp.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({color:0x6f9bd1, transparent:true, opacity:0.5})));
+  camGroup.add(grp);
+});
+scene.add(new THREE.AmbientLight(0xffffff,1));
+
+// controls
+const bCams=document.getElementById('bCams'), bMap=document.getElementById('bMap'), bSpin=document.getElementById('bSpin');
+bCams.onclick=()=>{camGroup.visible=!camGroup.visible;bCams.classList.toggle('on',camGroup.visible);};
+bMap.onclick=()=>{mapPlane.visible=!mapPlane.visible;bMap.classList.toggle('on',mapPlane.visible);};
+bSpin.onclick=()=>{spin=!spin;bSpin.classList.toggle('on',spin);};
+function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+function tick(){requestAnimationFrame(tick); if(spin)az+=0.0015; applyCam(); renderer.render(scene,camera);} tick();
+</script>
+</body>
+</html>
