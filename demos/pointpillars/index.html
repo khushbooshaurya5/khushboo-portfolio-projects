@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PointPillars 3D Detection — Interactive Demo</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono);overflow:hidden}
+  #c{position:fixed;inset:0;display:block}
+  .hud{position:fixed;left:16px;top:16px;max-width:min(360px,86vw);z-index:5}
+  .hud h1{font-size:15px;margin:0 0 4px;letter-spacing:.5px}
+  .hud p{font-size:11px;line-height:1.5;color:var(--muted);margin:0 0 10px}
+  .hud .tag{color:var(--accent)}
+  .panel{background:rgba(23,23,26,.82);border:1px solid var(--line);border-radius:10px;padding:12px 14px;backdrop-filter:blur(6px)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--ink);background:#1e1e22;border:1px solid var(--line);border-radius:7px;padding:7px 11px;cursor:pointer;transition:.2s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.on{background:var(--accent);border-color:var(--accent);color:#0F0F10;font-weight:600}
+  .legend{position:fixed;right:16px;bottom:16px;font-size:10px;color:var(--muted);z-index:5;text-align:right;line-height:1.7}
+  .legend b{color:var(--accent)}
+  .foot{position:fixed;left:16px;bottom:14px;font-size:10px;color:var(--muted);z-index:5}
+  .foot a{color:var(--accent);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+  .hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);font-size:10px;color:#5a564d;z-index:4;pointer-events:none}
+  @media(max-width:600px){.legend{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud">
+  <div class="panel">
+    <h1>PointPillars — 3D Object Detection</h1>
+    <p><span class="tag">Illustrative demo.</span> A synthetic driving LiDAR scene visualising the PointPillars pipeline: point cloud → <b>pillars</b> → BEV pseudo-image → SSD detection head → oriented 3D boxes. Not live inference — the training code is the real work.</p>
+    <div class="row">
+      <button id="bBoxes" class="on">Boxes</button>
+      <button id="bBEV">Top-down (BEV)</button>
+      <button id="bSpin" class="on">Auto-rotate</button>
+    </div>
+  </div>
+</div>
+<div class="legend">
+  <div><b>■</b> detected vehicle · oriented 3D box</div>
+  <div>points colored by height</div>
+  <div>score shown per box</div>
+</div>
+<div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/pointpillars-3d-detection" target="_blank" rel="noreferrer">code ↗</a></div>
+<div class="hint">drag to orbit · scroll to zoom</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const THREE_OK = typeof THREE !== 'undefined';
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0F0F10);
+scene.fog = new THREE.Fog(0x0F0F10, 60, 160);
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 500);
+
+// ---- simple orbit state ----
+let az = 0.6, el = 0.5, rad = 70, tgt = new THREE.Vector3(0,0,0);
+function applyCam(){
+  const ce = Math.cos(el), se = Math.sin(el);
+  camera.position.set(tgt.x + rad*ce*Math.cos(az), tgt.y + rad*se, tgt.z + rad*ce*Math.sin(az));
+  camera.lookAt(tgt);
+}
+let bev = false, spin = true;
+// interaction
+let drag=false, px=0, py=0;
+canvas.addEventListener('pointerdown', e=>{drag=true;px=e.clientX;py=e.clientY;spin=false;document.getElementById('bSpin').classList.remove('on');});
+addEventListener('pointerup', ()=>drag=false);
+addEventListener('pointermove', e=>{ if(!drag)return; az -= (e.clientX-px)*0.006; el = Math.max(0.08, Math.min(1.45, el + (e.clientY-py)*0.006)); px=e.clientX; py=e.clientY; });
+canvas.addEventListener('wheel', e=>{ e.preventDefault(); rad = Math.max(28, Math.min(140, rad + e.deltaY*0.05)); }, {passive:false});
+
+// ---- ground grid ----
+const grid = new THREE.GridHelper(160, 40, 0x2b2925, 0x1c1b18);
+grid.position.y = -0.05; scene.add(grid);
+
+// ---- synthetic point cloud ----
+function rand(a,b){return a + Math.random()*(b-a);}
+const pts = [];
+// ground scatter
+for(let i=0;i<9000;i++){
+  const r = Math.sqrt(Math.random())*70, a = Math.random()*Math.PI*2;
+  const x = Math.cos(a)*r, z = Math.sin(a)*r;
+  const y = Math.random()*0.25 + Math.sin(x*0.15)*0.15;
+  pts.push([x,y,z]);
+}
+// vehicles (boxes of points) — [x,z,heading,len,wid,ht,score]
+const cars = [
+  [ 10, 4,  0.15, 4.4, 1.9, 1.5, 0.97],
+  [ -8, 12, 1.55, 4.6, 2.0, 1.6, 0.94],
+  [ 22, -6, 0.05, 4.2, 1.8, 1.5, 0.91],
+  [ 4, 30, 0.25, 4.8, 2.0, 1.7, 0.88],
+  [ -18, -14, 2.9, 4.3, 1.9, 1.5, 0.85],
+  [ 34, 16, 1.2, 4.5, 1.9, 1.6, 0.79],
+];
+cars.forEach(c=>{
+  const [cx,cz,h,l,w,ht]=c, ch=Math.cos(h), sh=Math.sin(h);
+  for(let i=0;i<520;i++){
+    let lx=rand(-l/2,l/2), lw=rand(-w/2,w/2), ly=rand(0,ht);
+    // shell bias
+    if(Math.random()<0.6){ if(Math.random()<0.5) lx = (lx<0?-l/2:l/2); else lw = (lw<0?-w/2:w/2); }
+    const x = cx + lx*ch - lw*sh, z = cz + lx*sh + lw*ch;
+    pts.push([x, ly+0.1, z]);
+  }
+});
+// build geometry
+const g = new THREE.BufferGeometry();
+const pos = new Float32Array(pts.length*3), col = new Float32Array(pts.length*3);
+const c1=new THREE.Color(0x2f6fb0), c2=new THREE.Color(0x35c2a8), c3=new THREE.Color(0xf0d24b);
+for(let i=0;i<pts.length;i++){
+  pos[i*3]=pts[i][0]; pos[i*3+1]=pts[i][1]; pos[i*3+2]=pts[i][2];
+  const t = Math.min(1, pts[i][1]/2.0);
+  const col_ = t<0.5 ? c1.clone().lerp(c2, t*2) : c2.clone().lerp(c3,(t-0.5)*2);
+  col[i*3]=col_.r; col[i*3+1]=col_.g; col[i*3+2]=col_.b;
+}
+g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+g.setAttribute('color', new THREE.BufferAttribute(col,3));
+const cloud = new THREE.Points(g, new THREE.PointsMaterial({size:0.28, vertexColors:true, sizeAttenuation:true}));
+scene.add(cloud);
+
+// ---- detection boxes ----
+const boxGroup = new THREE.Group(); scene.add(boxGroup);
+const labelSprites = [];
+function makeLabel(txt){
+  const cv=document.createElement('canvas'); cv.width=128; cv.height=40; const x=cv.getContext('2d');
+  x.fillStyle='#D9502E'; x.font='bold 26px monospace'; x.textBaseline='middle'; x.fillText(txt, 6, 22);
+  const tex=new THREE.CanvasTexture(cv); const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex, depthTest:false}));
+  sp.scale.set(6,1.9,1); return sp;
+}
+cars.forEach(c=>{
+  const [cx,cz,h,l,w,ht,score]=c;
+  const geo=new THREE.BoxGeometry(l,ht,w);
+  const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({color:0xD9502E}));
+  edges.position.set(cx, ht/2+0.1, cz); edges.rotation.y = -h; boxGroup.add(edges);
+  // heading arrow
+  const dir=new THREE.ArrowHelper(new THREE.Vector3(Math.cos(h),0,Math.sin(h)), new THREE.Vector3(cx,ht/2,cz), l*0.7, 0xf0d24b, 1.1, 0.7);
+  boxGroup.add(dir);
+  const lab=makeLabel(score.toFixed(2)); lab.position.set(cx, ht+1.4, cz); boxGroup.add(lab); labelSprites.push(lab);
+});
+
+// lights (for arrows)
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+// ---- controls ----
+const bBoxes=document.getElementById('bBoxes'), bBEV=document.getElementById('bBEV'), bSpin=document.getElementById('bSpin');
+bBoxes.onclick=()=>{ boxGroup.visible=!boxGroup.visible; bBoxes.classList.toggle('on', boxGroup.visible); };
+bBEV.onclick=()=>{ bev=!bev; bBEV.classList.toggle('on', bev); };
+bSpin.onclick=()=>{ spin=!spin; bSpin.classList.toggle('on', spin); };
+
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+
+function tick(){
+  requestAnimationFrame(tick);
+  if(spin) az += 0.0016;
+  if(bev){ el += (1.5-el)*0.08; } else { el += (0.5-el)*0.06; }
+  applyCam();
+  labelSprites.forEach(s=>s.quaternion.copy(camera.quaternion));
+  renderer.render(scene,camera);
+}
+if(THREE_OK) tick();
+</script>
+</body>
+</html>

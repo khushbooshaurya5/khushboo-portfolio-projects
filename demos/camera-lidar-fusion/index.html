@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Camera–LiDAR Fusion — Interactive Demo</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:1000px;margin:0 auto;padding:22px 16px 60px}
+  h1{font-size:17px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 16px;max-width:720px}
+  .tag{color:var(--accent)}
+  .stage{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000;aspect-ratio:2/1}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  button{font-family:var(--mono);font-size:12px;letter-spacing:.5px;color:var(--ink);background:#1e1e22;border:1px solid var(--line);border-radius:8px;padding:9px 14px;cursor:pointer;transition:.2s}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.on{background:var(--accent);border-color:var(--accent);color:#0F0F10;font-weight:600}
+  .legend{font-size:11px;color:var(--muted);line-height:1.9;margin-top:8px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin:0 5px 0 12px;vertical-align:middle}
+  .foot{font-size:11px;color:var(--muted);margin-top:20px}
+  .foot a{color:var(--accent);text-decoration:none}
+  .foot a:hover{text-decoration:underline}
+  .modehint{font-size:11px;color:#6a655b;margin-top:6px;min-height:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Camera–LiDAR Fusion — sensor ablation</h1>
+  <p class="lead"><span class="tag">Illustrative demo.</span> Dense scene segmentation from a front camera fused with projected LiDAR. Flip between <b>RGB only</b>, <b>LiDAR only</b> (points projected into the image, colored by depth), and <b>Fusion</b> (the two-stream output) — the same <code>rgb / lidar / fusion</code> ablation the training repo runs. Synthetic scene; the PyTorch code (KITTI) is the real work.</p>
+
+  <div class="stage">
+    <canvas id="c" width="1000" height="500"></canvas>
+  </div>
+
+  <div class="row">
+    <button id="mRGB" class="on">RGB only</button>
+    <button id="mLID">LiDAR only</button>
+    <button id="mFUS">Fusion</button>
+  </div>
+  <div class="modehint" id="hint">Front-camera RGB input.</div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/camera-lidar-fusion" target="_blank" rel="noreferrer">code ↗</a></div>
+</div>
+
+<script>
+const cv=document.getElementById('c'), x=cv.getContext('2d'), W=cv.width, H=cv.height;
+// ---- scene primitives (a simple straight road with two cars, sign, trees) ----
+const horizon=H*0.42;
+// vanishing-point road geometry
+const vp={x:W*0.52, y:horizon};
+const cars=[ {x:W*0.40,y:H*0.66,w:150,h:95,c:'#b23b26'}, {x:W*0.66,y:H*0.58,w:96,h:62,c:'#2f5f86'} ];
+const trees=[ {x:W*0.12,y:horizon,s:1}, {x:W*0.86,y:horizon,s:1.2}, {x:W*0.24,y:horizon,s:.7} ];
+
+function drawRGB(){
+  // sky
+  let sky=x.createLinearGradient(0,0,0,horizon); sky.addColorStop(0,'#243447'); sky.addColorStop(1,'#5a6b7a');
+  x.fillStyle=sky; x.fillRect(0,0,W,horizon);
+  // ground
+  x.fillStyle='#3b3a36'; x.fillRect(0,horizon,W,H-horizon);
+  // road (trapezoid to vanishing point)
+  x.fillStyle='#4a4a4e'; x.beginPath();
+  x.moveTo(W*0.30,H); x.lineTo(vp.x-10,vp.y); x.lineTo(vp.x+10,vp.y); x.lineTo(W*0.80,H); x.closePath(); x.fill();
+  // lane dashes
+  x.strokeStyle='#e8d24a'; x.lineWidth=4; x.setLineDash([26,22]);
+  x.beginPath(); x.moveTo(W*0.55,H); x.lineTo(vp.x,vp.y); x.stroke(); x.setLineDash([]);
+  // trees
+  trees.forEach(t=>{ x.fillStyle='#2c3a2a'; const s=t.s; x.beginPath(); x.ellipse(t.x,t.y-10*s,26*s,40*s,0,0,7); x.fill(); x.fillStyle='#3a2f26'; x.fillRect(t.x-4*s,t.y+20*s,8*s,26*s); });
+  // sign
+  x.fillStyle='#2b6b4a'; x.fillRect(W*0.80,horizon-26,60,34); x.fillStyle='#cfd8d0'; x.font='11px monospace'; x.fillText('A81',W*0.805,horizon-4);
+  // cars
+  cars.forEach(c=>{ x.fillStyle=c.c; roundRect(c.x-c.w/2,c.y-c.h/2,c.w,c.h*0.6,8); x.fill(); x.fillStyle=shade(c.c,-20); roundRect(c.x-c.w/2+8,c.y-c.h/2-c.h*0.28,c.w-16,c.h*0.4,6); x.fill(); x.fillStyle='#12141a'; x.fillRect(c.x-c.w/2+14,c.y-c.h*0.22,c.w-28,c.h*0.22); // windshield
+    x.fillStyle='#1b1b1f'; x.beginPath(); x.arc(c.x-c.w*0.28,c.y+c.h*0.28,c.w*0.09,0,7); x.arc(c.x+c.w*0.28,c.y+c.h*0.28,c.w*0.09,0,7); x.fill(); });
+}
+function roundRect(rx,ry,rw,rh,r){x.beginPath();x.moveTo(rx+r,ry);x.arcTo(rx+rw,ry,rx+rw,ry+rh,r);x.arcTo(rx+rw,ry+rh,rx,ry+rh,r);x.arcTo(rx,ry+rh,rx,ry,r);x.arcTo(rx,ry,rx+rw,ry,r);x.closePath();}
+function shade(hex,d){const n=parseInt(hex.slice(1),16);let r=(n>>16)+d,g=((n>>8)&255)+d,b=(n&255)+d;r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));return `rgb(${r},${g},${b})`;}
+
+// LiDAR points: sample a grid on the ground + on car surfaces, depth = distance
+function depthColor(t){ // t 0(near)->1(far)
+  const c1=[240,80,46], c2=[240,210,75], c3=[53,194,168], c4=[47,111,176];
+  const stops=[c1,c2,c3,c4]; const f=t*3; const i=Math.min(2,Math.floor(f)); const k=f-i;
+  const a=stops[i],b=stops[i+1]; return `rgb(${a[0]+(b[0]-a[0])*k|0},${a[1]+(b[1]-a[1])*k|0},${a[2]+(b[2]-a[2])*k|0})`;
+}
+function drawLiDAR(overlay){
+  // ground points
+  for(let i=0;i<2600;i++){
+    const u=Math.random(), road=0.30+ (0.50)*u; // wider near bottom
+    const yy=horizon + (H-horizon)*Math.pow(u,0.7);
+    const spread=(1-u)*0.18; const xx=vp.x + (Math.random()*2-1)*(W*(0.06+ (1-u)*0.34));
+    if(xx<0||xx>W)continue;
+    const t=1-u; x.fillStyle=depthColor(Math.min(1,u*1.05)); x.globalAlpha=overlay?0.85:1;
+    x.fillRect(xx, yy, 2.2, 2.2);
+  }
+  // car-surface points (denser, nearer)
+  cars.forEach((c,ci)=>{ const near=ci===0?0.28:0.52; for(let i=0;i<420;i++){ const px=c.x-c.w/2+Math.random()*c.w, py=c.y-c.h*0.5+Math.random()*c.h*0.9; x.fillStyle=depthColor(near+Math.random()*0.06); x.globalAlpha=overlay?0.9:1; x.fillRect(px,py,2.4,2.4);} });
+  x.globalAlpha=1;
+}
+// Fusion: semantic segmentation regions
+const SEG={road:'#8657d6',car:'#D9502E',sky:'#3f7fb0',veg:'#3aa657',sign:'#e8c93a'};
+function drawFusion(){
+  // sky
+  x.fillStyle=SEG.sky; x.globalAlpha=0.9; x.fillRect(0,0,W,horizon);
+  // ground/other
+  x.fillStyle='#4b4740'; x.fillRect(0,horizon,W,H-horizon);
+  // road region
+  x.fillStyle=SEG.road; x.beginPath(); x.moveTo(W*0.30,H); x.lineTo(vp.x-10,vp.y); x.lineTo(vp.x+10,vp.y); x.lineTo(W*0.80,H); x.closePath(); x.fill();
+  // veg
+  trees.forEach(t=>{ x.fillStyle=SEG.veg; const s=t.s; x.beginPath(); x.ellipse(t.x,t.y-10*s,30*s,46*s,0,0,7); x.fill(); });
+  // sign
+  x.fillStyle=SEG.sign; x.fillRect(W*0.80,horizon-30,64,40);
+  // cars
+  cars.forEach(c=>{ x.fillStyle=SEG.car; roundRect(c.x-c.w/2-4,c.y-c.h*0.8,c.w+8,c.h*1.35,8); x.fill(); });
+  x.globalAlpha=1;
+  // thin white boundaries for a "segmented" feel
+  x.strokeStyle='rgba(255,255,255,.18)'; x.lineWidth=1.5;
+  cars.forEach(c=>{ x.strokeRect(c.x-c.w/2-4,c.y-c.h*0.8,c.w+8,c.h*1.35); });
+}
+
+let mode='rgb';
+const legend=document.getElementById('legend'), hint=document.getElementById('hint');
+function render(){
+  x.clearRect(0,0,W,H);
+  if(mode==='rgb'){ drawRGB(); hint.textContent='Front-camera RGB input.'; legend.innerHTML=''; }
+  else if(mode==='lidar'){ x.fillStyle='#0b0b0d'; x.fillRect(0,0,W,H); drawLiDAR(false); hint.textContent='LiDAR points projected into the image plane, colored by depth (near → far).'; legend.innerHTML='depth: <i style="background:#D9502E"></i>near <i style="background:#f0d24b"></i> <i style="background:#35c2a8"></i> <i style="background:#2f6fb0"></i>far'; }
+  else { drawRGB(); x.globalAlpha=0.62; drawFusion(); x.globalAlpha=1; drawLiDAR(true); hint.textContent='Fusion: RGB + projected LiDAR → dense semantic segmentation.'; legend.innerHTML='<i style="background:#8657d6"></i>road <i style="background:#D9502E"></i>vehicle <i style="background:#3f7fb0"></i>sky <i style="background:#3aa657"></i>vegetation <i style="background:#e8c93a"></i>sign'; }
+}
+const mRGB=document.getElementById('mRGB'),mLID=document.getElementById('mLID'),mFUS=document.getElementById('mFUS');
+function setMode(m,btn){mode=m;[mRGB,mLID,mFUS].forEach(b=>b.classList.remove('on'));btn.classList.add('on');render();}
+mRGB.onclick=()=>setMode('rgb',mRGB); mLID.onclick=()=>setMode('lidar',mLID); mFUS.onclick=()=>setMode('fusion',mFUS);
+render();
+</script>
+</body>
+</html>
