@@ -163,6 +163,15 @@ header.nav.scrolled .nav-in{padding-block:16px}
 .wi-links a:hover{color:var(--ink)}
 .wi-links a.live:hover{opacity:.8;color:var(--accent)}
 .wi-demo:hover .wi-name{color:var(--accent)}
+.demo-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+.demo-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#141311;text-decoration:none;color:inherit;transition:border-color .3s,transform .3s var(--ease)}
+.demo-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.demo-card img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center;display:block;border-bottom:1px solid var(--line)}
+.demo-card .dc-t{padding:11px 13px;font-family:var(--mono);font-size:11px;letter-spacing:.4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.demo-card .dc-t b{font-weight:500}
+.demo-card .dc-t .live{color:var(--accent);white-space:nowrap}
+@media(max-width:760px){.demo-gallery{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.demo-gallery{grid-template-columns:1fr}}
 
 .filters{display:flex;flex-wrap:wrap;gap:10px;margin:60px 0 44px}
 .filters button{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
@@ -814,6 +823,21 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
             </span>
           </span>
         </div>
+      </div>
+
+      <div class="demo-gallery">
+        <a class="demo-card rv" href="demos/pointpillars/">
+          <img src="demos/previews/pointpillars.jpg" alt="PointPillars 3D detection — LiDAR point cloud with oriented 3D boxes" loading="lazy"/>
+          <span class="dc-t"><b>PointPillars 3D Detection</b><span class="live">▶ live</span></span>
+        </a>
+        <a class="demo-card rv" href="demos/bev-map-segmentation/">
+          <img src="demos/previews/bev-map-segmentation.jpg" alt="BEV map segmentation — top-down semantic grid with surround cameras" loading="lazy"/>
+          <span class="dc-t"><b>BEV Map Segmentation</b><span class="live">▶ live</span></span>
+        </a>
+        <a class="demo-card rv" href="demos/camera-lidar-fusion/">
+          <img src="demos/previews/camera-lidar-fusion.jpg" alt="Camera-LiDAR fusion — RGB + projected LiDAR semantic segmentation" loading="lazy"/>
+          <span class="dc-t"><b>Camera–LiDAR Fusion</b><span class="live">▶ live</span></span>
+        </a>
       </div>
     </div>
   </div>
