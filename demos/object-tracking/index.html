@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Real-time Object Tracking — ByteTrack</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:700px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  .stage{position:relative;width:100%;aspect-ratio:4/3;background:#000;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  video,canvas.ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hud{position:absolute;top:10px;right:12px;display:flex;gap:8px}
+  .hud span{font-size:11px;color:var(--ink);background:rgba(0,0,0,.5);padding:4px 9px;border-radius:6px;letter-spacing:.4px}
+  .overlay-start{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(15,15,16,.6);text-align:center;padding:20px}
+  .overlay-start.hidden{display:none}
+  button.go{font-family:var(--mono);font-size:13px;color:#0F0F10;background:var(--accent);border:0;border-radius:9px;padding:11px 22px;cursor:pointer;letter-spacing:.4px;font-weight:600}
+  button.go:disabled{opacity:.45;cursor:default} button.go:not(:disabled):hover{filter:brightness(1.08)}
+  .status{font-size:11px;color:var(--muted);margin:12px 0 0;min-height:16px}
+  .row{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
+  .facts{flex:1;min-width:240px}
+  .facts h3{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .facts li{font-size:11.5px;color:var(--muted);line-height:1.7;list-style:none;margin:0;padding-left:14px;position:relative}
+  .facts li:before{content:"▹";position:absolute;left:0;color:var(--accent)}
+  .facts ul{margin:0;padding:0}
+  .priv{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.6}.priv b{color:var(--ink)}
+  .foot{margin-top:20px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+</style>
+  <script type="module" crossorigin src="./assets/index-CedQlYOU.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Real-time Multi-Object Tracking</h1>
+  <p class="lead"><span class="tag">Detection + tracking, live in your browser.</span> A <b>MediaPipe</b> detector (EfficientDet-Lite) finds objects each frame; a from-scratch <b>ByteTrack-style tracker</b> then links them across frames into persistent tracks — each box keeps its <b>ID and colour</b> as it moves, with a motion trail. The tracker's two-stage association recovers objects through low-confidence frames (blur, partial occlusion) instead of dropping their ID. Everything runs client-side; no frame leaves your device.</p>
+
+  <div class="stage" id="stage">
+    <video id="cam" playsinline muted></video>
+    <canvas class="ov" id="overlay"></canvas>
+    <div class="hud"><span id="fps">— fps</span><span id="count">0 tracked</span></div>
+    <div class="overlay-start" id="startOverlay">
+      <div style="font-size:13px;color:var(--ink)">Live tracking needs your camera.</div>
+      <button class="go" id="start" disabled>Enable camera</button>
+    </div>
+  </div>
+  <div class="status" id="status">loading…</div>
+
+  <div class="row">
+    <div class="facts">
+      <h3>What you're seeing</h3>
+      <ul>
+        <li><b style="color:var(--ink)">Coloured box + #ID</b> — one persistent track; the ID survives motion &amp; brief occlusion</li>
+        <li><b style="color:var(--ink)">Trail</b> — the track's recent path (constant-velocity motion model)</li>
+        <li><b style="color:var(--ink)">Two-stage matching</b> — high-confidence detections matched first, then leftover tracks recovered from the low-confidence tail (the ByteTrack idea)</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="priv"><b>Private by design:</b> the camera stream stays in the page — nothing is uploaded or recorded.</p>
+  <div class="foot">← <a href="../../">back to portfolio</a> · <a href="https://github.com/khushbooshaurya5/khushboo-portfolio-projects/tree/main/demos/object-tracking" target="_blank" rel="noreferrer">code (tracker.ts) ↗</a></div>
+</div>
+</body>
+</html>
