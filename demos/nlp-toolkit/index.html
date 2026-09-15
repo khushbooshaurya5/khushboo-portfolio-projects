@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NLP Toolkit — segmentation, POS &amp; term recognition</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:720px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  textarea{width:100%;min-height:120px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:13px;line-height:1.6;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--accent)}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .tab{font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 13px;cursor:pointer;letter-spacing:.3px}
+  .tab.on{color:#0F0F10;background:var(--accent);border-color:var(--accent);font-weight:600}
+  .tab:not(.on):hover{color:var(--ink);border-color:var(--muted)}
+  .ex{margin-left:auto;display:flex;gap:8px}
+  .ex button{font-family:var(--mono);font-size:11px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 11px;cursor:pointer}
+  .ex button:hover{color:var(--ink);border-color:var(--muted)}
+  .out{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px;min-height:120px;font-size:13px;line-height:1.9}
+  .hint{font-size:11px;color:var(--muted);margin:8px 0 0}
+  /* sentences */
+  .sent{display:block;padding:6px 10px;margin:4px 0;border-left:2px solid var(--accent);background:rgba(217,80,46,.06);border-radius:0 8px 8px 0}
+  .sent .sn{color:var(--accent);font-size:10px;margin-right:8px}
+  /* pos */
+  .tok{display:inline-block;position:relative;padding:2px 5px;margin:2px 1px;border-radius:6px;cursor:default;border:1px solid transparent}
+  .tok small{display:block;font-size:8.5px;letter-spacing:.5px;opacity:.85;text-align:center;text-transform:uppercase}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+  .legend span{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+  /* terms */
+  .term{display:inline-flex;align-items:center;gap:7px;background:rgba(236,231,221,.05);border:1px solid var(--line);border-radius:20px;padding:5px 12px;margin:3px;font-size:12px}
+  .term b{color:var(--ink)} .term .c{color:var(--accent);font-size:10px}
+  .grp{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+  .grp:first-child{margin-top:0}
+  .ent{display:inline-block;padding:3px 10px;margin:3px;border-radius:8px;font-size:12px;border:1px solid var(--line)}
+  .stat{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .stat div{font-size:11px;color:var(--muted)} .stat b{display:block;color:var(--ink);font-size:20px;font-weight:600;letter-spacing:.5px}
+  .row{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px}
+  .facts{flex:1;min-width:240px}
+  .facts h3{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .facts li{font-size:11.5px;color:var(--muted);line-height:1.7;list-style:none;margin:0;padding-left:14px;position:relative}
+  .facts li:before{content:"▹";position:absolute;left:0;color:var(--accent)}
+  .facts ul{margin:0;padding:0}
+  .foot{margin-top:20px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>NLP Toolkit</h1>
+  <p class="lead"><span class="tag">Classic NLP, live in your browser.</span> Type or paste any English text and watch a rule-based + statistical pipeline take it apart: <b>sentence segmentation</b>, <b>part-of-speech tagging</b>, <b>term / noun-phrase recognition</b>, and <b>named-entity extraction</b> — the same primitives spaCy and stanza expose, running entirely client-side. Nothing leaves your device.</p>
+
+  <textarea id="inp" spellcheck="false"></textarea>
+
+  <div class="bar">
+    <button class="tab on" data-v="sent">Sentences</button>
+    <button class="tab" data-v="pos">POS tags</button>
+    <button class="tab" data-v="terms">Terms</button>
+    <button class="tab" data-v="ents">Entities</button>
+    <span class="ex">
+      <button data-ex="mt">MT abstract</button>
+      <button data-ex="news">News</button>
+    </span>
+  </div>
+
+  <div class="out" id="out">loading…</div>
+  <p class="hint" id="hint"></p>
+
+  <div class="row">
+    <div class="facts">
+      <h3>What each view does</h3>
+      <ul>
+        <li><b style="color:var(--ink)">Sentences</b> — boundary detection that isn't just splitting on "." (handles <i>e.g.</i>, <i>Dr.</i>, decimals, abbreviations)</li>
+        <li><b style="color:var(--ink)">POS tags</b> — every token labelled Noun / Verb / Adjective / … from context, not a dictionary lookup</li>
+        <li><b style="color:var(--ink)">Terms</b> — multi-word noun phrases (<i>#Adjective* #Noun+</i>) ranked by frequency — the backbone of keyword &amp; terminology extraction</li>
+        <li><b style="color:var(--ink)">Entities</b> — people, places, organisations, dates and numeric values pulled out by tag</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="foot">Runs on <a href="https://github.com/spencermountain/compromise" target="_blank" rel="noreferrer">compromise</a> (MIT), self-hosted — no network calls. · <a href="../../">← back to portfolio</a></p>
+</div>
+
+<script src="./compromise.js"></script>
+<script>
+const EXAMPLES = {
+  mt: `Neural machine translation has largely replaced phrase-based systems. In this work, Dr. Khushboo Kumari fine-tunes a MarianMT model on a German-English corpus and evaluates it with BLEU and COMET. The model was trained at Hochschule Aalen using roughly 4,000 parallel sentences. Results improved by 3.2 BLEU points, e.g. from 28.1 to 31.3 on the held-out test set. Google and Meta released similar multilingual systems in 2022.`,
+  news: `The European Space Agency confirmed on Monday that its Ariane 6 rocket will launch from French Guiana next week. Officials in Paris said the mission, delayed since 2023, carries three small satellites for climate monitoring. "This is a milestone for European independence in space," said the program director. Analysts expect the flight to cost about 115 million euros.`
+};
+
+let doc, view = 'sent';
+const inp = document.getElementById('inp');
+const out = document.getElementById('out');
+const hint = document.getElementById('hint');
+
+// primary tag -> colour + short label (priority order matters)
+const TAGMAP = [
+  ['Person',       ['#e0b0ff','Person']],
+  ['Place',        ['#8fd3ff','Place']],
+  ['Organization', ['#ffd479','Org']],
+  ['Date',         ['#a0e6c0','Date']],
+  ['Value',        ['#a0e6c0','Value']],
+  ['Verb',         ['#ff9d7a','Verb']],
+  ['Adjective',    ['#f4e08a','Adj']],
+  ['Adverb',       ['#c9b8ff','Adv']],
+  ['Pronoun',      ['#9fb4c9','Pron']],
+  ['Preposition',  ['#7d8a99','Prep']],
+  ['Conjunction',  ['#7d8a99','Conj']],
+  ['Determiner',   ['#7d8a99','Det']],
+  ['Noun',         ['#9fe3d0','Noun']],
+];
+function primary(tags){
+  for (const [t,info] of TAGMAP) if (tags.includes(t)) return info;
+  return ['#8b8578', tags[0] || '—'];
+}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+function render(){
+  if (!doc){ out.textContent = 'type something above.'; return; }
+  hint.textContent = '';
+  if (view === 'sent') return renderSent();
+  if (view === 'pos')  return renderPos();
+  if (view === 'terms')return renderTerms();
+  if (view === 'ents') return renderEnts();
+}
+
+function renderSent(){
+  const sents = doc.json();
+  if (!sents.length){ out.textContent='—'; return; }
+  out.innerHTML = sents.map((s,i)=>
+    `<span class="sent"><span class="sn">S${String(i+1).padStart(2,'0')}</span>${esc(s.text.trim())}</span>`
+  ).join('');
+  hint.textContent = `${sents.length} sentence${sents.length>1?'s':''} · boundaries detected in context (abbreviations & decimals don't split)`;
+}
+
+function renderPos(){
+  const legend = TAGMAP.filter(([t])=>['Noun','Verb','Adjective','Adverb','Person','Place','Organization','Value'].includes(t))
+    .map(([t,info])=>`<span><i style="background:${info[0]}"></i>${info[1]}</span>`).join('');
+  const terms = doc.json({terms:{tags:true}}).flatMap(s=>s.terms);
+  const html = terms.map(t=>{
+    const [col,lab] = primary(t.tags||[]);
+    return `<span class="tok" title="${(t.tags||[]).join(', ')}" style="background:${col}22;border-color:${col}55;color:${col}">${esc(t.text)}<small style="color:${col}">${lab}</small></span>`;
+  }).join(' ');
+  out.innerHTML = `<div class="legend">${legend}</div>${html}`;
+  hint.textContent = `${terms.length} tokens · hover a token for its full tag set`;
+}
+
+function renderTerms(){
+  const phrases = doc.match('#Adjective* #Noun+').out('array')
+    .map(s=>s.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim()).filter(s=>s.length>1);
+  const freq = {};
+  phrases.forEach(p=>freq[p]=(freq[p]||0)+1);
+  const ranked = Object.entries(freq).sort((a,b)=> b[1]-a[1] || b[0].length-a[0].length);
+  if (!ranked.length){ out.textContent='no noun phrases found.'; return; }
+  out.innerHTML = ranked.map(([p,c])=>
+    `<span class="term"><b>${esc(p)}</b>${c>1?`<span class="c">×${c}</span>`:''}</span>`
+  ).join('');
+  hint.textContent = `${ranked.length} unique noun phrases · pattern #Adjective* #Noun+ · the basis of keyword & terminology extraction`;
+}
+
+function renderEnts(){
+  const groups = [
+    ['People',        '#Person+',       '#e0b0ff'],
+    ['Places',        '#Place+',        '#8fd3ff'],
+    ['Organisations', '#Organization+', '#ffd479'],
+    ['Dates',         '#Date+',         '#a0e6c0'],
+    ['Values',        '#Value+',        '#a0e6c0'],
+  ];
+  let html='', total=0;
+  for (const [name,pat,col] of groups){
+    const items=[...new Set(doc.match(pat).out('array').map(s=>s.trim().replace(/[.,;:]+$/,'')).filter(Boolean))];
+    if (!items.length) continue;
+    total+=items.length;
+    html += `<div class="grp">${name}</div>` + items.map(x=>
+      `<span class="ent" style="background:${col}22;border-color:${col}55;color:${col}">${esc(x)}</span>`).join('');
+  }
+  out.innerHTML = html || 'no named entities detected.';
+  hint.textContent = total ? `${total} entities across ${groups.length} types` : '';
+}
+
+function analyse(){ doc = nlp(inp.value); render(); }
+
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); view=b.dataset.v; render();
+}));
+document.querySelectorAll('.ex button').forEach(b=>b.addEventListener('click',()=>{
+  inp.value = EXAMPLES[b.dataset.ex]; analyse();
+}));
+let t; inp.addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(analyse,180); });
+
+inp.value = EXAMPLES.mt;
+analyse();
+</script>
+</body>
+</html>
