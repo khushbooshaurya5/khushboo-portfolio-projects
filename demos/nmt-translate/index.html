@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Neural Machine Translation — in your browser</title>
+<style>
+  :root{--bg:#0F0F10;--panel:#17171a;--ink:#ECE7DD;--muted:#8b8578;--accent:#D9502E;--line:#2b2925;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--mono)}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+  h1{font-size:18px;margin:0 0 6px;letter-spacing:.4px}
+  p.lead{font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px;max-width:720px}
+  .lead b{color:var(--ink)} .tag{color:var(--accent)}
+  .ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+  select{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer}
+  select:focus{outline:none;border-color:var(--accent)}
+  .swap{font-family:var(--mono);font-size:14px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .swap:hover{color:var(--ink);border-color:var(--accent)}
+  .io{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.io{grid-template-columns:1fr}}
+  .cell{display:flex;flex-direction:column}
+  .cell label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  textarea,.tgt{width:100%;min-height:150px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:var(--mono);font-size:14px;line-height:1.6;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--accent)}
+  .tgt{white-space:pre-wrap;overflow:auto;color:var(--ink)}
+  .tgt.empty{color:var(--muted)}
+  .go{font-family:var(--mono);font-size:13px;color:#0F0F10;background:var(--accent);border:0;border-radius:9px;padding:11px 22px;cursor:pointer;letter-spacing:.4px;font-weight:600;margin-top:14px}
+  .go:disabled{opacity:.45;cursor:default} .go:not(:disabled):hover{filter:brightness(1.08)}
+  .status{font-size:11px;color:var(--muted);margin:12px 0 0;min-height:16px}
+  .bar{height:4px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px;display:none}
+  .bar.on{display:block} .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+  .row{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px}
+  .facts{flex:1;min-width:240px}
+  .facts h3{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .facts li{font-size:11.5px;color:var(--muted);line-height:1.7;list-style:none;margin:0;padding-left:14px;position:relative}
+  .facts li:before{content:"▹";position:absolute;left:0;color:var(--accent)}
+  .facts ul{margin:0;padding:0}
+  .priv{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.6}.priv b{color:var(--ink)}
+  .foot{margin-top:20px;font-size:11px;color:var(--muted)} .foot a{color:var(--accent);text-decoration:none} .foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Neural Machine Translation</h1>
+  <p class="lead"><span class="tag">A translation model, running on your device.</span> A <b>MarianMT</b> encoder-decoder (the Helsinki-NLP <b>opus-mt</b> family) runs entirely in your browser via <b>transformers.js</b> — no API, no server, nothing uploaded. The model (~30–75&nbsp;MB, quantised) downloads once on first use and is cached; after that, translation is fully offline.</p>
+
+  <div class="ctl">
+    <select id="pair">
+      <option value="de-en">German → English</option>
+      <option value="en-de">English → German</option>
+      <option value="fr-en">French → English</option>
+      <option value="es-en">Spanish → English</option>
+      <option value="en-fr">English → French</option>
+    </select>
+    <button class="swap" id="swap" title="swap direction">⇄</button>
+  </div>
+
+  <div class="io">
+    <div class="cell">
+      <label id="srcLbl">Source</label>
+      <textarea id="src" spellcheck="false"></textarea>
+    </div>
+    <div class="cell">
+      <label id="tgtLbl">Translation</label>
+      <div class="tgt empty" id="tgt">—</div>
+    </div>
+  </div>
+
+  <button class="go" id="go" disabled>Translate</button>
+  <div class="status" id="status">initialising…</div>
+  <div class="bar" id="bar"><i id="barfill"></i></div>
+
+  <div class="row">
+    <div class="facts">
+      <h3>What's happening</h3>
+      <ul>
+        <li><b style="color:var(--ink)">Encoder-decoder</b> — the source is encoded, then the target is generated token-by-token with <b style="color:var(--ink)">beam search</b></li>
+        <li><b style="color:var(--ink)">opus-mt</b> — one specialised model per language direction (no giant multilingual model needed)</li>
+        <li><b style="color:var(--ink)">ONNX + WASM</b> — the model runs through onnxruntime-web; first load fetches &amp; caches the weights, then it's local</li>
+        <li><b style="color:var(--ink)">This is the runtime</b> side of the companion <a href="https://github.com/khushbooshaurya5/nmt-finetune-eval" target="_blank" rel="noreferrer" style="color:var(--accent)">nmt-finetune-eval</a> repo, which fine-tunes &amp; scores these models (BLEU/COMET)</li>
+      </ul>
+      <p class="priv"><b>Private by design.</b> Your text is translated on your device and never sent anywhere.</p>
+    </div>
+  </div>
+
+  <p class="foot">Powered by <a href="https://github.com/huggingface/transformers.js" target="_blank" rel="noreferrer">transformers.js</a> · models by <a href="https://huggingface.co/Xenova" target="_blank" rel="noreferrer">Xenova</a> (opus-mt) · <a href="../../">← back to portfolio</a></p>
+</div>
+
+<script type="module">
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3/+esm';
+
+// Fetch models from the HF hub; cache them in the browser after first download.
+env.allowLocalModels = false;
+env.useBrowserCache = true;
+
+const MODELS = {
+  'de-en': 'Xenova/opus-mt-de-en',
+  'en-de': 'Xenova/opus-mt-en-de',
+  'fr-en': 'Xenova/opus-mt-fr-en',
+  'es-en': 'Xenova/opus-mt-es-en',
+  'en-fr': 'Xenova/opus-mt-en-fr',
+};
+const LANG = { de:'German', en:'English', fr:'French', es:'Spanish' };
+const SAMPLES = {
+  'de-en': 'Maschinelle Übersetzung hat die statistischen Systeme weitgehend ersetzt. Das Modell wurde an der Hochschule Aalen trainiert und mit BLEU bewertet.',
+  'en-de': 'Neural machine translation runs entirely in your browser. The model was trained on a parallel corpus and evaluated with BLEU and COMET.',
+  'fr-en': "La traduction automatique neuronale fonctionne entièrement dans votre navigateur, sans serveur ni clé d'API.",
+  'es-en': 'La traducción automática neuronal se ejecuta completamente en tu navegador, sin servidor ni clave de API.',
+  'en-fr': 'The translation model runs on your device and your text is never uploaded to any server.',
+};
+
+const $ = id => document.getElementById(id);
+const pairSel = $('pair'), src = $('src'), tgt = $('tgt'), go = $('go');
+const status = $('status'), bar = $('bar'), barfill = $('barfill');
+const srcLbl = $('srcLbl'), tgtLbl = $('tgtLbl');
+
+let translator = null, curPair = null, busy = false;
+
+function setLabels(){
+  const [s,t] = pairSel.value.split('-');
+  srcLbl.textContent = LANG[s]; tgtLbl.textContent = LANG[t];
+}
+
+async function ensureModel(){
+  const pair = pairSel.value;
+  if (translator && curPair === pair) return translator;
+  translator = null; curPair = pair;
+  go.disabled = true;
+  bar.classList.add('on'); barfill.style.width = '0%';
+  status.textContent = `loading ${MODELS[pair]} …`;
+  try {
+    translator = await pipeline('translation', MODELS[pair], {
+      progress_callback: (p) => {
+        if (p.status === 'progress' && p.total) {
+          const pct = Math.round(p.loaded / p.total * 100);
+          barfill.style.width = pct + '%';
+          status.textContent = `downloading ${p.file || 'model'} — ${pct}%`;
+        } else if (p.status === 'ready') {
+          status.textContent = 'model ready.';
+        }
+      }
+    });
+    bar.classList.remove('on');
+    status.textContent = 'model ready — translate away.';
+    go.disabled = false;
+    return translator;
+  } catch (e) {
+    bar.classList.remove('on');
+    status.textContent = '⚠ could not load the model (needs internet on first use). ' + (e?.message || e);
+    go.disabled = false;
+    throw e;
+  }
+}
+
+async function translate(){
+  if (busy) return;
+  const text = src.value.trim();
+  if (!text){ tgt.textContent = '—'; tgt.classList.add('empty'); return; }
+  busy = true; go.disabled = true;
+  try {
+    const t = await ensureModel();
+    status.textContent = 'translating…';
+    const out = await t(text, { max_new_tokens: 256, num_beams: 4 });
+    const txt = Array.isArray(out) ? out.map(o => o.translation_text).join(' ') : out.translation_text;
+    tgt.textContent = txt; tgt.classList.remove('empty');
+    status.textContent = 'done · translated on-device.';
+  } catch (e) {
+    status.textContent = '⚠ ' + (e?.message || e);
+  } finally {
+    busy = false; go.disabled = false;
+  }
+}
+
+go.addEventListener('click', translate);
+pairSel.addEventListener('change', () => {
+  setLabels();
+  src.value = SAMPLES[pairSel.value] || '';
+  tgt.textContent = '—'; tgt.classList.add('empty');
+  ensureModel().catch(()=>{});
+});
+$('swap').addEventListener('click', () => {
+  const [s,t] = pairSel.value.split('-');
+  const rev = `${t}-${s}`;
+  if (MODELS[rev]){ pairSel.value = rev; pairSel.dispatchEvent(new Event('change')); }
+  else { status.textContent = `no model for ${LANG[t]} → ${LANG[s]} in this demo.`; }
+});
+
+// init
+setLabels();
+src.value = SAMPLES['de-en'];
+ensureModel().catch(()=>{});
+</script>
+</body>
+</html>
