@@ -519,14 +519,14 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
         <div class="p-org rv">Max Planck Institute for Astronomy<span class="dot"></span>Heidelberg<span class="dot"></span>Jun — Aug 2026</div>
         <h3 class="p-title rv rv-d1">Gravitational-Lens Detection in JWST Imaging</h3>
         <div class="p-field rv rv-d1"><div class="p-lbl">Research Question</div><div class="p-val">Can rare gravitational lenses be surfaced from massive JWST NIRCam surveys without exhaustive labels?</div></div>
-        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val"><strong>Semi-supervised anomaly detection</strong> with a deep CNN (<strong>EfficientNet-B0</strong>) over model-ready image cutouts, with evaluation protocols — AUROC, false-positive rate, sample purity — validated before deployment.</div></div>
+        <div class="p-field rv rv-d2"><div class="p-lbl">Approach</div><div class="p-val"><strong>Semi-supervised anomaly detection</strong> with a deep CNN (<strong>ConvNeXt</strong>) over model-ready image cutouts, with evaluation protocols — AUROC, false-positive rate, sample purity — validated before deployment.</div></div>
         <div class="p-metrics rv rv-d2">
-          <div class="pm"><div class="v">B0</div><div class="l">EfficientNet backbone</div></div>
+          <div class="pm"><div class="v">ConvNeXt</div><div class="l">Classifier backbone</div></div>
           <div class="pm"><div class="v">AUROC</div><div class="l">Purity-validated</div></div>
           <div class="pm"><div class="v">FITS</div><div class="l">MAST · astroquery</div></div>
         </div>
         <div class="p-field rv rv-d3"><div class="p-lbl">Scientific rigor</div><div class="p-val">Diagnosed and closed a <strong>data-leakage</strong> bug through a systematic audit — classes were separable on preprocessing artefacts, not real signal — by rebuilding the pipeline to process every class identically. Built the data prep too: MAST/astroquery archive queries, FITS mosaics, WCS alignment, cutouts.</div></div>
-        <div class="p-tags rv rv-d3"><span>PyTorch</span><span>EfficientNet-B0</span><span>Semi-Supervised</span><span>Anomaly Detection</span><span>FITS · WCS</span></div>
+        <div class="p-tags rv rv-d3"><span>PyTorch</span><span>ConvNeXt</span><span>Semi-Supervised</span><span>Anomaly Detection</span><span>FITS · WCS</span></div>
         <div class="p-links rv rv-d4"><span class="na">◆ Data Science Group · Dr. Ivelina Momcheva</span></div>
       </div>
     </article>
@@ -1030,7 +1030,7 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
             <span class="chip" data-ctx="Primary framework across research & industry">PyTorch</span>
             <span class="chip" data-ctx="Also used for CV models">TensorFlow</span>
             <span class="chip" data-ctx="Classical ML & pipelines">scikit-learn</span>
-            <span class="chip" data-ctx="EfficientNet, YOLO">CNNs</span>
+            <span class="chip" data-ctx="ConvNeXt, YOLO">CNNs</span>
             <span class="chip" data-ctx="Implemented from scratch">Transformers</span>
             <span class="chip" data-ctx="Gene-expression research">KAN</span>
             <span class="chip" data-ctx="Defect classification @ Zeiss">Random Forests</span>
@@ -1120,8 +1120,8 @@ footer{border-top:1px solid var(--line);padding:34px var(--gut)}
       <div class="tl-item rv">
         <div class="tl-top"><div class="tl-org">Max Planck Institute for Astronomy</div><div class="tl-period">Jun — Aug 2026</div></div>
         <div class="tl-role">Student Research Assistant · Data Science Group · Heidelberg</div>
-        <div class="tl-impact">Built an ML pipeline detecting gravitational lenses in JWST NIRCam imaging via semi-supervised anomaly detection (EfficientNet-B0); diagnosed and closed a data-leakage bug through a systematic audit.</div>
-        <div class="tl-tags"><span>EfficientNet</span><span>Semi-Supervised</span><span>FITS · WCS</span><span>AUROC</span></div>
+        <div class="tl-impact">Built an ML pipeline detecting gravitational lenses in JWST NIRCam imaging via semi-supervised anomaly detection (ConvNeXt); diagnosed and closed a data-leakage bug through a systematic audit.</div>
+        <div class="tl-tags"><span>ConvNeXt</span><span>Semi-Supervised</span><span>FITS · WCS</span><span>AUROC</span></div>
       </div>
       <div class="tl-item rv">
         <div class="tl-top"><div class="tl-org">Carl Zeiss SMT GmbH</div><div class="tl-period">Nov 2025 — Apr 2026</div></div>
